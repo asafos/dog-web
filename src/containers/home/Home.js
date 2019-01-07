@@ -8,6 +8,7 @@ import Avatar from '@material-ui/core/Avatar';
 import avatar from '../../../assets/images/user.png'
 import { SITE_NAME } from '../../constants/appData';
 import GridTiles from './components/GridTiles';
+import Zoom from 'react-reveal/Zoom';
 
 const styles = {
     container: {
@@ -98,6 +99,9 @@ class App extends Component {
                             </Grid>
                             <Grid item xs={12} className={classes.gridContainer}>
                                 <GridTiles />
+                            </Grid>
+                            <Grid component={Zoom} item xs={12} className={classes.gridContainer}>
+                            HOPAAA
                             </Grid>
                         </Grid>
                     </Grid>
