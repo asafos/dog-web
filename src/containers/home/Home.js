@@ -6,10 +6,26 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import avatar from '../../../assets/images/user.png'
+import { SITE_NAME } from '../../constants/appData';
+import GridTiles from './components/GridTiles';
 
 const styles = {
+    container: {
+        marginTop: 420,
+        paddingTop: 64,
+        zIndex: 10,
+        // width: 'calc(100vh)',
+        height: '100vh',
+        backgroundColor: 'white',
+        position: 'relative',
+        maxWidth: 'none',
+        boxShadow: '0px -4px 4px -1px rgba(0,0,0,0.1)'
+
+    },
     name: {
         color: 'white',
+        marginRight: 48,
+        textShadow: '0px 0px 7px #000000'
     },
     avatar: {
         width: 100,
@@ -17,35 +33,76 @@ const styles = {
         margin: 16
     },
     jobTitle: {
-        color: 'white',
         margin: 16
+    },
+    fixedBackground: {
+        position: 'fixed',
+        top: 64,
+        left: 0,
+        right: 0,
+        // width: window.innerWidth,
+        height: 420,
+        backgroundColor: '#FFFFFF !important',
+        backgroundImage: 'url(https://ybxzcgnc7b-flywheel.netdna-ssl.com/wp-content/uploads/2017/11/cute-puppy-names.jpg) !important',
+        backgroundRepeat: 'no-repeat !important',
+        backgroundAttachment: 'scroll !important',
+        backgroundPosition: '50% 18% !important',
+        zIndex: 1,
+        backgroundSize: 'cover !important',
+        WebkitBackgroundSize: 'cover !important',
+    },
+    gridContainer: {
+        padding: 32
     }
 };
 
 class App extends Component {
 
+    state = { width: window.innerWidth }
+
+    componentDidMount() {
+        this.updateWindowDimensions();
+        window.addEventListener('resize', this.updateWindowDimensions);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowDimensions);
+    }
+
+    updateWindowDimensions = () => this.setState({ width: window.innerWidth });
+
     render() {
         const { classes } = this.props;
+        const { width } = this.state;
         return (
-            <Grid container justify="center" className={classes.container}>
-                <Grid item>
-                    <Grid container alignItems="center" direction="column" className={classes.container}>
-                        <Grid item>
-                            <Avatar src={avatar} sizes="100" className={classes.avatar}/>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h2" className={classes.name}>
-                                Asaf Yehezkel
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="subtitle1" className={classes.jobTitle}>
-                                Full Stack Web and Mobile Developer
-                            </Typography>
+            <div>
+                <Grid container justify="flex-end" alignItems="center" className={classes.fixedBackground}>
+                    <Grid item>
+                        <Typography variant="h2" className={classes.name}>
+                            {SITE_NAME}
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <Grid container justify="center" style={{ width }} className={classes.container}>
+                    <Grid item xs={12}>
+                        <Grid container alignItems="center" direction="column">
+                            <Grid item>
+                                <Typography variant="h3" className={classes.header}>
+                                    Header
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography variant="subtitle1" className={classes.jobTitle}>
+                                    Choose a category
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} className={classes.gridContainer}>
+                                <GridTiles />
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
+            </div>
         );
     }
 }

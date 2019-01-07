@@ -9,11 +9,12 @@ import Home from '../home/Home';
 
 const styles = {
     container: {
-        marginTop: 80,
+        marginTop: 64,
     },
     header: {
-        backgroundColor: 'transparent',
-        boxShadow: 'unset'
+    },
+    content: {
+        maxWidth: 760
     }
 };
 
@@ -25,7 +26,7 @@ class App extends Component {
             <div>
                 <Header history={history}/>
                 <Grid container justify="center" className={classes.container}>
-                    <Grid item>
+                    <Grid item xs={12}>
                         <Switch>
                             <Route path="/" exact component={Home}/>
                         </Switch>

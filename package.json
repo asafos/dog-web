@@ -24,10 +24,12 @@
   },
   "dependencies": {
     "@material-ui/core": "^3.8.1",
+    "@material-ui/icons": "^3.0.1",
     "jss": "^10.0.0-alpha.5",
     "react": "^16.4.2",
     "react-dom": "16.4.2",
     "react-jss": "^10.0.0-alpha.7",
+    "react-pose": "^4.0.4",
     "react-redux": "^5.1.0",
     "react-redux-i18n": "^1.9.3",
     "react-router": "^4.3.1",
