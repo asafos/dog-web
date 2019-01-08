@@ -4,8 +4,6 @@ import { bindActionCreators } from "redux";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
-import avatar from '../../../assets/images/user.png'
 import { SITE_NAME } from '../../constants/appData';
 import GridTiles from './components/GridTiles';
 import Zoom from 'react-reveal/Zoom';
@@ -16,12 +14,10 @@ const styles = {
         paddingTop: 64,
         zIndex: 10,
         // width: 'calc(100vh)',
-        height: '100vh',
         backgroundColor: 'white',
         position: 'relative',
         maxWidth: 'none',
         boxShadow: '0px -4px 4px -1px rgba(0,0,0,0.1)'
-
     },
     name: {
         color: 'white',
@@ -57,7 +53,7 @@ const styles = {
     }
 };
 
-class App extends Component {
+class Home extends Component {
 
     state = { width: window.innerWidth }
 
@@ -115,4 +111,4 @@ const mapStateToProps = ({ app }) => ({ app });
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(App));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Home));

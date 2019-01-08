@@ -1,11 +1,12 @@
-import React, {Component} from 'react';
-import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
+import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import Grid from "@material-ui/core/es/Grid/Grid";
-import {withStyles} from '@material-ui/core/styles';
-import {Route, Switch} from "react-router-dom";
+import { withStyles } from '@material-ui/core/styles';
+import { Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
 import Home from '../home/Home';
+import Story from '../story/Story';
 
 const styles = {
     container: {
@@ -21,23 +22,22 @@ const styles = {
 class App extends Component {
 
     render() {
-        const {classes, history} = this.props;
+        const { classes, history } = this.props;
         return (
             <div>
-                <Header history={history}/>
-                <Grid container justify="center" className={classes.container}>
-                    <Grid item xs={12}>
-                        <Switch>
-                            <Route path="/" exact component={Home}/>
-                        </Switch>
-                    </Grid>
-                </Grid>
+                <Header history={history} />
+                <div className={classes.container}>
+                    <Switch>
+                        <Route path="/" exact component={Home} />
+                        <Route path="/story" component={Story} />
+                    </Switch>
+                </div>
             </div>
         );
     }
 }
 
-const mapStateToProps = ({app}) => ({app});
+const mapStateToProps = ({ app }) => ({ app });
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 

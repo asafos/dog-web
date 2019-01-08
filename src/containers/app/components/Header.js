@@ -11,7 +11,9 @@ import {Route, Switch} from "react-router-dom";
 import { SITE_NAME } from '../../../constants/appData';
 
 const styles = {
-    header: {
+    brand: {
+        cursor: 'pointer',
+        flex: 1
     }
 };
 
@@ -22,11 +24,11 @@ class Header extends Component {
         return (
             <AppBar position="fixed" className={classes.header}>
                 <Toolbar>
-                    <Typography variant="h6" color="inherit" style={{flex: 1}}>
+                    <Typography onClick={() => history.replace('')} 
+                                variant="h6" color="inherit" className={classes.brand}>
                         {SITE_NAME}
                     </Typography>
-                    <Button onClick={() => history.replace('projects')} color="inherit">Projects</Button>
-                    <Button color="inherit">Contact Me</Button>
+                    <Button onClick={() => history.replace('story')} color="inherit">Story</Button>
                 </Toolbar>
             </AppBar>
         );
