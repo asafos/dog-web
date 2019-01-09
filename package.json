@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "poi --serve",
+    "server": "nodemon --exec babel-node server",
     "build": "poi index.js --prod",
     "build:lib": "NODE_ENV=production babel src --out-dir lib --ignore __tests__",
     "prepublish": "npm run build && npm run build:lib"
@@ -14,8 +15,11 @@
   "devDependencies": {
     "@babel/cli": "^7.2.0",
     "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
     "node-sass": "^4.11.0",
+    "nodemon": "^1.18.9",
     "poi": "^12",
     "poi-preset-react": "^9.2.1",
     "react-hot-loader": "^4.6.0",
@@ -25,6 +29,7 @@
   "dependencies": {
     "@material-ui/core": "^3.8.1",
     "@material-ui/icons": "^3.0.1",
+    "fastify": "^1.13.3",
     "jss": "^10.0.0-alpha.5",
     "react": "^16.4.2",
     "react-dom": "16.4.2",

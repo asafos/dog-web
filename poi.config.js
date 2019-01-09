@@ -1,5 +1,4 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
 const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
@@ -17,6 +16,11 @@ module.exports = {
     // },
     babel: {
         transpileModules: ['@material-ui', '@int', 'react-native-base64', 'redux']
+    },
+    devServer: {
+        // host: 'localhost',
+        // port: serverPort
+        proxy: 'http://localhost:8081'
     }
 };
 
