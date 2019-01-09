@@ -74,8 +74,8 @@ function GridTiles(props) {
     return (
         <div className={classes.root}>
             <Grid container className={classes.gridList}>
-                {tileData.map(tile => (
-                    <Grid item xs={12} sm={4} md={3} key={tile.img} component={Box}
+                {tileData.map((tile, index) => (
+                    <Grid item xs={12} sm={4} md={3} key={index} component={Box}
                         className={classes.tile} style={{ backgroundImage: `url(${tile.img})` }}>
                         <div className={classes.tileContainer}>
                             <div className={classes.tileFooter}>

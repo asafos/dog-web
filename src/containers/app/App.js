@@ -7,6 +7,7 @@ import { Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
 import Home from '../home/Home';
 import Story from '../story/Story';
+import axios from 'axios';
 
 const styles = {
     container: {
@@ -20,6 +21,10 @@ const styles = {
 };
 
 class App extends Component {
+
+    componentDidMount() {
+        axios.get('/api/data').then(console.log)
+    }
 
     render() {
         const { classes, history } = this.props;
