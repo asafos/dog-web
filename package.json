@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "poi --serve",
+    "client": "poi --serve",
     "server": "nodemon --exec babel-node server",
     "build": "poi index.js --prod",
     "build:lib": "NODE_ENV=production babel src --out-dir lib --ignore __tests__",
@@ -33,6 +33,9 @@
     "config": "^3.0.1",
     "fastify": "^1.13.3",
     "jss": "^10.0.0-alpha.5",
+    "mongoose": "^5.4.3",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
     "react": "^16.4.2",
     "react-dom": "16.4.2",
     "react-jss": "^10.0.0-alpha.7",
@@ -44,6 +47,7 @@
     "react-router-dom": "^4.3.1",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
+    "redux-saga": "^0.16.2",
     "redux-thunk": "^2.3.0",
     "reduxsauce": "^1.0.1"
   }

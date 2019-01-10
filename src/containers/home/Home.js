@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import React, {Component} from 'react';
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 import Grid from "@material-ui/core/es/Grid/Grid";
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { SITE_NAME } from '../../constants/appData';
+import {SITE_NAME} from '../../constants/appData';
 import GridTiles from './components/GridTiles';
 import Zoom from 'react-reveal/Zoom';
 
@@ -55,7 +55,7 @@ const styles = {
 
 class Home extends Component {
 
-    state = { width: window.innerWidth }
+    state = {width: window.innerWidth}
 
     componentDidMount() {
         this.updateWindowDimensions();
@@ -66,11 +66,11 @@ class Home extends Component {
         window.removeEventListener('resize', this.updateWindowDimensions);
     }
 
-    updateWindowDimensions = () => this.setState({ width: window.innerWidth });
+    updateWindowDimensions = () => this.setState({width: window.innerWidth});
 
     render() {
-        const { classes } = this.props;
-        const { width } = this.state;
+        const {classes} = this.props;
+        const {width} = this.state;
         return (
             <div>
                 <Grid container justify="flex-end" alignItems="center" className={classes.fixedBackground}>
@@ -80,7 +80,7 @@ class Home extends Component {
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid container justify="center" style={{ width }} className={classes.container}>
+                <Grid container justify="center" style={{width}} className={classes.container}>
                     <Grid item xs={12}>
                         <Grid container alignItems="center" direction="column">
                             <Grid item>
@@ -94,10 +94,10 @@ class Home extends Component {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} className={classes.gridContainer}>
-                                <GridTiles />
+                                <GridTiles/>
                             </Grid>
                             <Grid component={Zoom} item xs={12} className={classes.gridContainer}>
-                            HOPAAA
+                                HOPAAA
                             </Grid>
                         </Grid>
                     </Grid>
@@ -107,7 +107,7 @@ class Home extends Component {
     }
 }
 
-const mapStateToProps = ({ app }) => ({ app });
+const mapStateToProps = ({app}) => ({app});
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
