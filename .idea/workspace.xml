@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bd0fd413-1658-40fa-93e9-7cd247a2cd13" name="Default" comment=" - Added saga middleware&#10; - Added facebook auth config">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/containers/login/Login.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/containers/login/LoginRedux.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/containers/login/LoginSagas.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/redux/sagas.js" />
+    <list default="true" id="bd0fd413-1658-40fa-93e9-7cd247a2cd13" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/default.json" afterPath="$PROJECT_DIR$/config/default.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.js" afterPath="$PROJECT_DIR$/server.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Main.js" afterPath="$PROJECT_DIR$/src/Main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/containers/home/Home.js" afterPath="$PROJECT_DIR$/src/containers/home/Home.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redux/store.js" afterPath="$PROJECT_DIR$/src/redux/store.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -72,8 +63,8 @@
       <file leaf-file-name="default.json" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/config/default.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+            <state relative-caret-position="120">
+              <caret line="8" column="43" lean-forward="false" selection-start-line="8" selection-start-column="43" selection-end-line="8" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -260,7 +251,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="npm.start">
+  <component name="RunManager" selected="npm.server">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="WIDTH" value="400" />
       <option name="HEIGHT" value="300" />
@@ -348,7 +339,10 @@
         <script value="server" />
       </scripts>
       <node-interpreter value="project" />
-      <envs />
+      <envs>
+        <env name="FACEBOOK_APP_SECRET" value="9c6354d680a474d272db570f8aa0c6ea" />
+        <env name="FACEBOOK_APP_ID" value="328996901035995" />
+      </envs>
     </configuration>
     <configuration name="start" type="js.build_tools.npm" factoryName="npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
@@ -384,12 +378,20 @@
       <workItem from="1546782108185" duration="4458000" />
       <workItem from="1546942591281" duration="624000" />
       <workItem from="1547114757783" duration="4056000" />
-      <workItem from="1547124735872" duration="379000" />
+      <workItem from="1547124735872" duration="1241000" />
     </task>
+    <task id="LOCAL-00001" summary=" - Added saga middleware&#10; - Added mongo connection&#10; - Added login page">
+      <created>1547125159379</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1547125159379</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13811000" />
+    <option name="totallyTimeSpent" value="14673000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1098" extended-state="0" />
@@ -457,6 +459,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value=" - Added saga middleware&#10; - Added mongo connection&#10; - Added login page" />
+    <option name="LAST_COMMIT_MESSAGE" value=" - Added saga middleware&#10; - Added mongo connection&#10; - Added login page" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -822,8 +828,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/config/default.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        <state relative-caret-position="120">
+          <caret line="8" column="43" lean-forward="false" selection-start-line="8" selection-start-column="43" selection-end-line="8" selection-end-column="43" />
           <folding />
         </state>
       </provider>

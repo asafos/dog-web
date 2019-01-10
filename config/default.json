@@ -4,4 +4,9 @@
         "host": "mongodb://localhost",
         "db": "dogweb"
     },
+    "auth": {
+        "facebook": {
+            "callback":"http://localhost:4000/auth/facebook/callback"
+        }
+    }
 }
