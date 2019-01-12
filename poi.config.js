@@ -20,7 +20,7 @@ module.exports = {
     devServer: {
         // host: 'localhost',
         // port: serverPort
-        proxy: 'http://localhost:8081'
+        proxy: 'http://localhost:8000'
     }
 };
 

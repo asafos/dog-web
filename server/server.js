@@ -14,11 +14,6 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret: 'passport-tutorial', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
 
-// Declare a route
-app.get('/api/data', (request, reply) => {
-    reply.send({ hello: 'world' })
-});
-
 app.listen(PORT, () => console.log('Server running on http://localhost:' + PORT));
 
 // Connect to DB

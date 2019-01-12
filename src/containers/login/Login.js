@@ -7,7 +7,8 @@ import axios from 'axios';
 import Button from "@material-ui/core/es/Button/Button";
 import LoginCreators from './LoginRedux';
 
-const {googleLogin} = LoginCreators;
+const {googleLogin, signup, login} = LoginCreators;
+
 const styles = {
     container: {
         padding: 20,
@@ -21,17 +22,33 @@ const styles = {
 
 class Login extends Component {
 
-    componentDidMount() {
-        axios.get('/api/data').then(console.log)
+    componentWillUpdate({auth: {user, fetching}, history}) {
+        if(user && !fetching) {
+            console.log(history)
+            history.push('/')
+        }
+    }
+
+    signup = () => {
+        const {signup} = this.props;
+        signup('test@test.com', '123456');
+    };
+    
+    login = () => {
+        const {login} = this.props;
+        login('test@test.com', '123456');
     }
 
     render() {
-        const {classes, googleLogin} = this.props;
+        const {classes} = this.props;
         return (
             <Grid container justify="center" alignItems="center" className={classes.container}>
                 <Grid item className={classes.loginWrapper}>
-                    <Button onClick={googleLogin}>
-                        Login with Google
+                    <Button onClick={this.signup}>
+                        Signup
+                    </Button>
+                    <Button onClick={this.login}>
+                        login
                     </Button>
                 </Grid>
             </Grid>
@@ -39,8 +56,8 @@ class Login extends Component {
     }
 }
 
-const mapStateToProps = ({login}) => ({login});
+const mapStateToProps = ({auth}) => ({auth});
 
-const mapDispatchToProps = dispatch => bindActionCreators({googleLogin}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({googleLogin, signup, login}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Login));

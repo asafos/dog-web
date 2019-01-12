@@ -7,7 +7,8 @@ import { Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
 import Home from '../home/Home';
 import Story from '../story/Story';
-import axios from 'axios';
+import LoginCreators from '../login/LoginRedux';
+const { getUser } = LoginCreators;
 
 const styles = {
     container: {
@@ -23,11 +24,19 @@ const styles = {
 class App extends Component {
 
     componentDidMount() {
-        axios.get('/api/data').then(console.log)
+        const { getUser } = this.props;
+        getUser();
+    }
+
+    componentWillUpdate({ auth }) {
+
     }
 
     render() {
-        const { classes, history } = this.props;
+        const { classes, history, auth } = this.props;
+        if (auth.fetching) {
+            return (<div>Loading...</div>)
+        }
         return (
             <div>
                 <Header history={history} />
@@ -42,8 +51,8 @@ class App extends Component {
     }
 }
 
-const mapStateToProps = ({ app }) => ({ app });
+const mapStateToProps = ({ app, auth }) => ({ app, auth });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getUser }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(App));
