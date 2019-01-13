@@ -4,8 +4,8 @@ import {LoginTypes} from './LoginRedux';
 // worker Saga: will be fired on USER_FETCH_REQUESTED actions
 function* getUser(action) {
     try {
-        const user = yield call(() => axios.get('/api/users/current'));
-        yield put({type: LoginTypes.GET_USER_SUCCEEDED, user: user});
+        const res = yield call(() => axios.get('/api/users/current'));
+        yield put({type: LoginTypes.GET_USER_SUCCEEDED, user: res.data.user});
     } catch (error) {
         yield put({type: LoginTypes.GET_USER_FAILED, error});
     }
@@ -23,13 +23,20 @@ function* signup(action) {
 function* login(action) {
     try {
         const res = yield call(() => axios.post('/api/users/login', action));
-        yield put({type: LoginTypes.LOGIN_SUCCEEDED, user: res.data.user});
+        yield put({type: LoginTypes.LOGIN_SUCCEEDED, user: res.data});
     } catch (error) {
         yield put({type: LoginTypes.LOGIN_FAILED, error});
     }
 }
 
-
+function* logout(action) {
+    try {
+        yield call(() => axios.post('/api/users/logout', action));
+        yield put({type: LoginTypes.LOGOUT_SUCCEEDED});
+    } catch (error) {
+        // yield put({type: LoginTypes.LOGIN_FAILED, error});
+    }
+}
 
 /*
   Starts fetchUser on each dispatched `USER_FETCH_REQUESTED` action.
@@ -51,6 +58,7 @@ function* loginSagas() {
         takeLatest(LoginTypes.GET_USER, getUser),
         takeLatest(LoginTypes.SIGNUP, signup),
         takeLatest(LoginTypes.LOGIN, login),
+        takeLatest(LoginTypes.LOGOUT, logout),
     ])
 }
 

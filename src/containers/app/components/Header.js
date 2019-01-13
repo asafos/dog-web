@@ -7,7 +7,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from "@material-ui/core/es/Toolbar/Toolbar";
 import Button from "@material-ui/core/es/Button/Button";
 import Typography from "@material-ui/core/es/Typography/Typography";
-import {Route, Switch} from "react-router-dom";
 import { SITE_NAME } from '../../../constants/appData';
 
 const styles = {
@@ -20,7 +19,7 @@ const styles = {
 class Header extends Component {
 
     render() {
-        const {classes, history} = this.props;
+        const {classes, history, logout} = this.props;
         return (
             <AppBar position="fixed" className={classes.header}>
                 <Toolbar>
@@ -29,6 +28,7 @@ class Header extends Component {
                         {SITE_NAME}
                     </Typography>
                     <Button onClick={() => history.replace('story')} color="inherit">Story</Button>
+                    <Button onClick={logout} color="inherit">Logout</Button>
                 </Toolbar>
             </AppBar>
         );

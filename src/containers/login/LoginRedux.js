@@ -14,6 +14,8 @@ const {Types, Creators} = createActions({
     login: ['email', 'password'],
     loginSucceeded: null,
     loginFailed: null,
+    logout: null,
+    logoutSucceeded: null,
 });
 
 export const LoginTypes = Types;
@@ -23,14 +25,15 @@ export default Creators;
 
 export const INITIAL_STATE = {
     fetching: true,
-    user: {}
+    user: null
 };
 
 /* ------------- Reducers ------------- */
 
 // const googleLogin = (state, {}) => ({...state, ...payload, initiated});
-const getUser = (state, {user}) => ({...state, user, });
+const getUser = (state, {user}) => ({...state, user, fetching: false});
 const login = (state, {user}) => ({...state, user, fetching: false});
+const logout = (state) => ({...state, user: null});
 
 /* ------------- Hookup Reducers To Types ------------- */
 export const reducer = createReducer(INITIAL_STATE, {
@@ -38,4 +41,6 @@ export const reducer = createReducer(INITIAL_STATE, {
     // [Types.GET_USER_FAILED]: getUser,
     // [Types.GET_USER_SUCCEEDED]: getUser,
     [Types.LOGIN_SUCCEEDED]: login,
+    [Types.LOGOUT_SUCCEEDED]: logout,
+    [Types.GET_USER_SUCCEEDED]: getUser,
 });

@@ -8,7 +8,7 @@ import Header from "./components/Header";
 import Home from '../home/Home';
 import Story from '../story/Story';
 import LoginCreators from '../login/LoginRedux';
-const { getUser } = LoginCreators;
+const { getUser, logout } = LoginCreators;
 
 const styles = {
     container: {
@@ -28,18 +28,20 @@ class App extends Component {
         getUser();
     }
 
-    componentWillUpdate({ auth }) {
-
+    componentWillUpdate({ auth: { fetching, user }, history }) {
+        if (!user && !fetching) {
+            history.push('/login')
+        }
     }
 
     render() {
-        const { classes, history, auth } = this.props;
+        const { classes, history, auth, logout } = this.props;
         if (auth.fetching) {
             return (<div>Loading...</div>)
         }
         return (
             <div>
-                <Header history={history} />
+                <Header history={history} logout={logout} />
                 <div className={classes.container}>
                     <Switch>
                         <Route path="/" exact component={Home} />
@@ -53,6 +55,6 @@ class App extends Component {
 
 const mapStateToProps = ({ app, auth }) => ({ app, auth });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getUser }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getUser, logout }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(App));
