@@ -13,7 +13,7 @@ function* getUser(action) {
 
 function* signup(action) {
     try {
-        const user = yield call(() => axios.post('/api/users/signup', {user: action}));
+        const user = yield call(() => axios.post('/api/users/signup', action));
         yield put({type: LoginTypes.SIGNUP_SUCCEEDED, user: user});
     } catch (error) {
         yield put({type: LoginTypes.SIGNUP_FAILED, error});
@@ -22,7 +22,7 @@ function* signup(action) {
 
 function* login(action) {
     try {
-        const res = yield call(() => axios.post('/api/users/login', {user: action}));
+        const res = yield call(() => axios.post('/api/users/login', action));
         yield put({type: LoginTypes.LOGIN_SUCCEEDED, user: res.data.user});
     } catch (error) {
         yield put({type: LoginTypes.LOGIN_FAILED, error});
