@@ -11,7 +11,7 @@ export default class Main extends Component {
             <MuiThemeProvider theme={theme}>
                 <Router>
                     <Switch>
-                        <Route path="/login" component={Login}/>
+                        <Route path="/auth" component={Login}/>
                         <Route path="/" component={App}/>
                     </Switch>
                 </Router>

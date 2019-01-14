@@ -30,7 +30,7 @@ class App extends Component {
 
     componentWillUpdate({ auth: { fetching, user }, history }) {
         if (!user && !fetching) {
-            history.push('/login')
+            history.push('/auth/login')
         }
     }
 

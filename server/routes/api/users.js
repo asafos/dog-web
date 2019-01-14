@@ -7,7 +7,7 @@ const router = express.Router();
 const Users = mongoose.model('Users');
 
 //POST new user route (optional, everyone has access)
-router.post('/signup', isAuthenticated, (req, res, next) => {
+router.post('/signup', (req, res, next) => {
     const { body: { email, password } } = req;
 
     if (!email) {
@@ -75,4 +75,4 @@ router.get('/current', isAuthenticated, (req, res, next) => {
         });
 });
 
-module.exports = router;
+export default router;
