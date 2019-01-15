@@ -37,7 +37,7 @@ const styles = {
     }
 };
 
-class LocalLoginForm extends Component {
+class SignupForm extends Component {
 
     renderTextField = ({ meta: { touched, error }, input, ...props }) => {
         const { classes } = this.props;
@@ -45,7 +45,7 @@ class LocalLoginForm extends Component {
             <TextField
                 {...input}
                 {...props}
-                error={touched && error}
+                error={touched && !!error}
                 helperText={touched && error}
                 className={classes.textField}
                 margin="normal"
@@ -62,8 +62,8 @@ class LocalLoginForm extends Component {
     };
 
     onSubmit = ({ email, password }) => {
-        const { login } = this.props;
-        login(email, password)
+        const { signup } = this.props;
+        signup(email, password)
     };
 
     render() {
@@ -76,16 +76,18 @@ class LocalLoginForm extends Component {
                             component={this.renderTextField} autoComplete="email" autoCapitalize="false" />
                         <Field name="password" label="Password" type="password"
                             component={this.renderTextField} />
+                        <Field name="verifyPassword" label="Verify Password" type="password"
+                            component={this.renderTextField} />
                     </Grid>
                     <Grid item className={classes.linkContainer}>
-                        <Link to="/auth/signup" className={classes.link} variant="flat">
-                            Signup
+                        <Link to="/auth/login" className={classes.link} variant="flat">
+                            Already have an account?
                         </Link>
                     </Grid>
                     <Grid item>
                         <Button variant="contained" color="primary" size="large"
                             type="submit" className={classes.button}>
-                            Login
+                            Signup
                     </Button>
                     </Grid>
                 </Grid>
@@ -95,20 +97,25 @@ class LocalLoginForm extends Component {
 }
 
 const validate = values => {
-    const errors = {}
-    if (!values.password) {
-        errors.password = 'Required'
-    }
+    const errors = {};
     if (!values.email) {
         errors.email = 'Required'
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = 'Invalid email address'
     }
+    if (!values.password) {
+        errors.password = 'Required'
+    }
+    if (!values.verifyPassword) {
+        errors.verifyPassword = 'Required'
+    } else if(values.password !== values.verifyPassword) {
+        errors.verifyPassword = 'Passwords are not identical'
+    }
     return errors
-}
+};
 
 
 export default reduxForm({
     validate,
-    form: 'LocalLoginForm'
-})(withStyles(styles)(LocalLoginForm))
+    form: 'SignupForm'
+})(withStyles(styles)(SignupForm))

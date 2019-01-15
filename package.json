@@ -8,7 +8,7 @@
     "server": "nodemon --exec babel-node $NODE_DEBUG_OPTION ./server/server",
     "build": "poi index.js --prod",
     "build:lib": "NODE_ENV=production babel src --out-dir lib --ignore __tests__",
-    "prepublish": "npm run build && npm run build:lib"
+    "prepublishOnly": "npm run build && npm run build:lib"
   },
   "author": "",
   "license": "ISC",
@@ -36,6 +36,7 @@
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
+    "email-verification": "^0.4.6",
     "express-jwt": "^5.3.1",
     "express-session": "^1.15.6",
     "fastify": "^1.13.3",

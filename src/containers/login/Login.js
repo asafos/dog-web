@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import LoginCreators from './LoginRedux';
 import LocalLoginForm from './components/LocalLoginForm';
 import { Route, Switch } from "react-router-dom";
+import SignupForm from "./components/SignupForm";
 
 const { googleLogin, signup, login } = LoginCreators;
 
@@ -26,13 +27,12 @@ class Login extends Component {
 
     componentWillUpdate({ auth: { user, fetching }, history }) {
         if (user && !fetching) {
-            console.log(history)
             history.push('/')
         }
     }
 
     render() {
-        const { classes, login } = this.props;
+        const { classes, login, signup } = this.props;
         return (
             <Grid container justify="center" alignItems="center" className={classes.container}>
                 <Grid item className={classes.loginWrapper} component={Paper}>
@@ -40,6 +40,7 @@ class Login extends Component {
                         <Grid item style={{ width: '100%' }}>
                             <Switch>
                                 <Route path="/auth/login" component={props => <LocalLoginForm {...props} login={login} />} />
+                                <Route path="/auth/signup" component={props => <SignupForm {...props} signup={signup} />} />
                             </Switch>
                         </Grid>
                     </Grid>
