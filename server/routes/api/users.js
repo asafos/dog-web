@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import passport from 'passport';
 import express from 'express';
-import {isAuthenticated} from '../../auth';
+import { isAuthenticated } from '../../auth';
 import nev from '../../services/email-verification';
 
 const router = express.Router();
@@ -9,36 +9,46 @@ const Users = mongoose.model('Users');
 
 //POST new user route (optional, everyone has access)
 router.post('/signup', (req, res, next) => {
-    const {body: {email, password}} = req;
+    const { body: { email, password } } = req;
 
     if (!email) {
-        return res.status(422).json({errors: {email: 'is required'}});
+        return res.status(422).json({ errors: { email: 'is required' } });
     }
 
     if (!password) {
-        return res.status(422).json({errors: {password: 'is required'}});
+        return res.status(422).json({ errors: { password: 'is required' } });
     }
 
-    const finalUser = new Users({email});
-    nev.createTempUser(finalUser, (err, existingPersistentUser, newTempUser) => {
-        if (err) {
-            return res.status(500).json(err);
+    Users.findOne({ email }).then(user => {
+        if (user) {
+            return res.status(409).json({ errors: { user: 'already exists' } });
         }
-        if (existingPersistentUser) {
-            return res.status(409).json({errors: {user: 'already exists'}});
-        }
-        if (newTempUser) {
-            const URL = newTempUser[nev.options.URLFieldName];
-            nev.sendVerificationEmail(email, URL, (err, info) => {
-                if (err) {
-                    return res.status(500).json(err);
-                }
-                res.status(200).json(info)
-            });
-        } else {
-            return res.status(409).json({errors: {verification: 'already sent'}});
-        }
-    });
+        const finalUser = new Users({ email });
+        finalUser.setPassword(password);
+        return finalUser.save()
+            .then(() => res.json({ user: finalUser.toAuthJSON() }));
+    })
+
+    // const finalUser = new Users({email});
+    // nev.createTempUser(finalUser, (err, existingPersistentUser, newTempUser) => {
+    //     if (err) {
+    //         return res.status(500).json(err);
+    //     }
+    //     if (existingPersistentUser) {
+    //         return res.status(409).json({errors: {user: 'already exists'}});
+    //     }
+    //     if (newTempUser) {
+    //         const URL = newTempUser[nev.options.URLFieldName];
+    //         nev.sendVerificationEmail(email, URL, (err, info) => {
+    //             if (err) {
+    //                 return res.status(500).json(err);
+    //             }
+    //             res.status(200).json(info)
+    //         });
+    //     } else {
+    //         return res.status(409).json({errors: {verification: 'already sent'}});
+    //     }
+    // });
 
     // finalUser.setPassword(password);
     // return finalUser.save()
@@ -47,14 +57,14 @@ router.post('/signup', (req, res, next) => {
 
 //POST login route (optional, everyone has access)
 router.post('/login', (req, res, next) => {
-    const {body: {email, password}} = req;
+    const { body: { email, password } } = req;
 
     if (!email) {
-        return res.status(422).json({errors: {email: 'is required'}});
+        return res.status(422).json({ errors: { email: 'is required' } });
     }
 
     if (!password) {
-        return res.status(422).json({errors: {password: 'is required'}});
+        return res.status(422).json({ errors: { password: 'is required' } });
     }
 
     return passport.authenticate('local', (err, passportUser, info) => {
@@ -79,9 +89,9 @@ router.post('/logout', (req, res, next) => {
 router.post('/email-verification', (req, res, next) => {
     nev.confirmTempUser(url, function (err, user) {
         if (err)
-        // handle error...
+            // handle error...
 
-        // user was found!
+            // user was found!
             if (user) {
                 // optional
                 nev.sendConfirmationEmail(user['email_field_name'], function (err, info) {
@@ -99,7 +109,7 @@ router.post('/email-verification', (req, res, next) => {
 
 //GET current route (required, only authenticated users have access)
 router.get('/current', isAuthenticated, (req, res, next) => {
-    const {user: {_id}} = req;
+    const { user: { _id } } = req;
 
     return Users.findById(_id)
         .then((user) => {
@@ -107,7 +117,7 @@ router.get('/current', isAuthenticated, (req, res, next) => {
                 return res.sendStatus(400);
             }
 
-            return res.json({user: user.toAuthJSON()});
+            return res.json({ user: user.toAuthJSON() });
         });
 });
 

@@ -8,6 +8,8 @@ import LoginCreators from './LoginRedux';
 import LocalLoginForm from './components/LocalLoginForm';
 import { Route, Switch } from "react-router-dom";
 import SignupForm from "./components/SignupForm";
+import { SITE_NAME } from '../../constants/appData';
+import Typography from '@material-ui/core/Typography';
 
 const { googleLogin, signup, login } = LoginCreators;
 
@@ -21,6 +23,16 @@ const styles = {
         backgroundColor: 'white',
         padding: 20
     },
+    brandContainer: {
+        textAlign: 'center',
+        maxWidth: 420,
+        marginBottom: -60
+    },
+    brand: {
+        fontFamily: '"Garamond", "Helvetica", "Arial", sans-serif',
+        fontWeight: '600',
+        textShadow: '0px 1px 4px #9797977d'
+    }
 };
 
 class Login extends Component {
@@ -34,7 +46,14 @@ class Login extends Component {
     render() {
         const { classes, login, signup } = this.props;
         return (
-            <Grid container justify="center" alignItems="center" className={classes.container}>
+            <Grid container justify="space-evenly" alignItems="center"
+                direction="column" className={classes.container}>
+                <Grid item className={classes.brandContainer}>
+                    <Typography component="h2" variant="h2" color="primary"
+                        className={classes.brand} gutterBottom>
+                        {SITE_NAME}
+                    </Typography>
+                </Grid>
                 <Grid item className={classes.loginWrapper} component={Paper}>
                     <Grid container>
                         <Grid item style={{ width: '100%' }}>

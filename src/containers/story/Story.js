@@ -11,7 +11,7 @@ const styles = {
     },
     contentWrapper: {
         width: 740,
-        padding: '30px 20px',
+        padding: '30px 24px',
     },
     storyTitle: {
         fontFamily: 'medium-content-serif-font,Georgia,Cambria,"Times New Roman",Times,serif',

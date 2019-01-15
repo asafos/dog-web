@@ -37,7 +37,7 @@ class App extends Component {
     render() {
         const { classes, history, auth, logout } = this.props;
         if (auth.fetching) {
-            return (<div>Loading...</div>)
+            return null
         }
         return (
             <div>

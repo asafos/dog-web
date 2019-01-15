@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "client": "poi --serve",
-    "server": "nodemon --exec babel-node $NODE_DEBUG_OPTION ./server/server",
+    "server": "nodemon --exec babel-node ./server/server",
     "build": "poi index.js --prod",
     "build:lib": "NODE_ENV=production babel src --out-dir lib --ignore __tests__",
     "prepublishOnly": "npm run build && npm run build:lib"

@@ -1,1 +1,1 @@
-export const SITE_NAME = 'Chen Katz';
+export const SITE_NAME = 'Website Name';

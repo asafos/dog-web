@@ -19,6 +19,7 @@ const styles = {
     button: {
         marginTop: 8,
         marginBottom: 8,
+        textTransform: 'none'
     },
     linkContainer: {
         display: 'flex',
