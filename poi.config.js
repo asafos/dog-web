@@ -1,9 +1,12 @@
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
     output: !isProd ? undefined : {
-        publicUrl: './'
+        // publicUrl: './',
+        fileNames: {
+            js: '[name].[chunkhash:8].js'
+        }
     },
     // assets: {
     //     inlineImageMaxSize: 999999

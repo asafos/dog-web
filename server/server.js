@@ -14,6 +14,7 @@ import routes from './routes';
 const MongoStore = require('connect-mongo')(session);
 const app = express();
 const SECRET = 'secret stuff';
+const dist = path.join(__dirname, '../dist');
 const mongoUri = process.env.MONGODB_URI || `${mongo.host}/${mongo.db}`;
 
 // Connect to DB
@@ -32,13 +33,15 @@ app.use(session({ secret: SECRET, resave: false, saveUninitialized: true, store:
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(express.static(dist));
 app.use(routes);
-console.log(path.join(__dirname, '../dist/index.html'));
-app.use('/', express.static(path.join(__dirname, '../dist')))
+app.get('*', (req, res) => res.sendFile(path.join(dist, 'index.html')));
+
+// app.use('/', express.static(path.join(__dirname, '../dist/index.html')))
 
 const port = process.env.PORT || PORT;
 
-app.listen(port, () => console.log('Server running on http://localhost:' + port, app.settings));
+app.listen(port, () => console.log('Server running on http://localhost:' + port));
 
 
 
