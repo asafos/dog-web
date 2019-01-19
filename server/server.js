@@ -35,7 +35,9 @@ app.use(routes);
 console.log(path.join(__dirname, '../dist/index.html'));
 app.use('/', express.static(path.join(__dirname, '../dist')))
 
-app.listen(PORT, () => console.log('Server running on http://localhost:' + PORT));
+const port = process.env.PORT || PORT;
+
+app.listen(port, () => console.log('Server running on http://localhost:' + port, app.settings));
 
 
 
