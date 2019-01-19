@@ -14,9 +14,10 @@ import routes from './routes';
 const MongoStore = require('connect-mongo')(session);
 const app = express();
 const SECRET = 'secret stuff';
+const mongoUri = process.env.MONGODB_URI || `${mongo.host}/${mongo.db}`;
 
 // Connect to DB
-mongoose.connect(`${mongo.host}/${mongo.db}`, { useNewUrlParser: true })
+mongoose.connect(mongoUri, { useNewUrlParser: true })
     .then(() => console.log('MongoDB connected...'))
     .catch(err => console.log(err));
 mongoose.Promise = global.Promise;
