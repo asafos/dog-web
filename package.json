@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "poi index.js --prod",
+    "build:client": "poi index.js --prod",
+    "build:server": "babel server --out-dir lib",
     "build:lib": "NODE_ENV=production babel src --out-dir lib --ignore __tests__",
     "client": "poi --serve",
     "server": "nodemon --exec babel-node ./server/server",
-    "start": "npm run server",
-    "postinstall": "npm run build",
+    "start": "node ./server/server",
+    "postinstall": "npm run build:client && npm run build:server",
     "prepublishOnly": "npm run build && npm run build:lib"
   },
   "author": "",
