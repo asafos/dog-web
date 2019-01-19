@@ -30,9 +30,10 @@ app.use(cookieParser(SECRET));
 app.use(session({ secret: SECRET, resave: false, saveUninitialized: true, store: new MongoStore({ mongooseConnection: db }), cookie: { httpOnly: true, maxAge: 2419200000 } }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(routes);
+console.log(path.join(__dirname, '../dist/index.html'));
+app.use('/', express.static(path.join(__dirname, '../dist')))
 
 app.listen(PORT, () => console.log('Server running on http://localhost:' + PORT));
 

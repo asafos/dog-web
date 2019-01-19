@@ -9,6 +9,7 @@
     "client": "poi --serve",
     "server": "nodemon --exec babel-node ./server/server",
     "start": "npm run server",
+    "postinstall": "npm run build",
     "prepublishOnly": "npm run build && npm run build:lib"
   },
   "author": "",
