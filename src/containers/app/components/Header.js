@@ -27,6 +27,7 @@ class Header extends Component {
                                 variant="h6" color="inherit" className={classes.brand}>
                         {SITE_NAME}
                     </Typography>
+                    <Button onClick={() => history.replace('create-story')} color="inherit">New Story</Button>
                     <Button onClick={() => history.replace('story')} color="inherit">Story</Button>
                     <Button onClick={logout} color="inherit">Logout</Button>
                 </Toolbar>

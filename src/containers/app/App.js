@@ -7,6 +7,7 @@ import { Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
 import Home from '../home/Home';
 import Story from '../story/Story';
+import CreateStory from '../create-story/CreateStory';
 import LoginCreators from '../login/LoginRedux';
 const { getUser, logout } = LoginCreators;
 
@@ -46,6 +47,7 @@ class App extends Component {
                     <Switch>
                         <Route path="/" exact component={Home} />
                         <Route path="/story" component={Story} />
+                        <Route path="/create-story" component={CreateStory} />
                     </Switch>
                 </div>
             </div>
