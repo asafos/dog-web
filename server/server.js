@@ -8,6 +8,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import './models/Users';
+import './models/Story';
 import passport from './auth/passport';
 import routes from './routes';
 
