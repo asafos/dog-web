@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import Grid from "@material-ui/core/es/Grid/Grid";
 import { withStyles } from '@material-ui/core/styles';
 import { Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
@@ -9,6 +8,8 @@ import Home from '../home/Home';
 import Story from '../story/Story';
 import CreateStory from '../create-story/CreateStory';
 import LoginCreators from '../login/LoginRedux';
+import Notification from '../../components/notification/Notification';
+
 const { getUser, logout } = LoginCreators;
 
 const styles = {
@@ -37,6 +38,7 @@ class App extends Component {
 
     render() {
         const { classes, history, auth, logout } = this.props;
+        console.log('auth', auth);
         if (auth.fetching) {
             return null
         }
@@ -50,6 +52,7 @@ class App extends Component {
                         <Route path="/create-story" component={CreateStory} />
                     </Switch>
                 </div>
+                <Notification />
             </div>
         );
     }

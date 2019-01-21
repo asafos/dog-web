@@ -1,29 +1,37 @@
 import { call, put, all, takeLatest } from 'redux-saga/effects'
 import axios from 'axios';
 import {StoryTypes} from './StoryRedux';
+import NotificationCreators from '../../components/notification/NotificationRedux';
+import StoryCreators from './StoryRedux';
+
+const {getStorySucceeded, getStoryFailed, getStory, saveStorySucceeded, saveStoryFailed} = StoryCreators;
+const {showNotification} = NotificationCreators;
+
 // worker Saga: will be fired on USER_FETCH_REQUESTED actions
-function* getStory(action) {
+function* getStorySaga(action) {
     try {
         const res = yield call(() => axios.get('/api/story/' + action.storyId));
-        yield put({type: StoryTypes.GET_STORY_SUCCEEDED, story: res.data.story});
+        yield put(getStorySucceeded(res.data.story));
     } catch (error) {
-        yield put({type: StoryTypes.GET_STORY_FAILED, error});
+        yield put(getStoryFailed(error));
     }
 }
 
-function* saveStory({story}) {
+function* saveStorySaga(action) {
     try {
-        yield call(() => axios.post('/api/story', story));
-        yield put({type: StoryTypes.SAVE_STORY_SUCCEEDED});
+        const res = yield call(() => axios.post('/api/story', action.story));
+        yield put(saveStorySucceeded());
+        yield put(showNotification('Story saved'));
+        yield put(getStory(res.data.story._id));
     } catch (error) {
-        yield put({type: StoryTypes.SAVE_STORY_FAILED, error});
+        yield put(saveStoryFailed(error));
     }
 }
 
 function* sagas() {
     yield all([
-        takeLatest(StoryTypes.GET_STORY, getStory),
-        takeLatest(StoryTypes.SAVE_STORY, saveStory),
+        takeLatest(StoryTypes.GET_STORY, getStorySaga),
+        takeLatest(StoryTypes.SAVE_STORY, saveStorySaga),
     ])
 }
 

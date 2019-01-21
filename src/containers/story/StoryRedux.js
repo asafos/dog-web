@@ -24,12 +24,16 @@ export const INITIAL_STATE = {
 
 const startAsyncReq = (state, {}) => ({...state, fetching: true});
 const getStorySucceeded = (state, {story}) => ({...state, ...story, fetching: false});
+const getStoryFailed = (state, {}) => ({...state, fetching: false});
 const saveStorySucceeded = (state, {}) => ({...state, fetching: false});
+const saveStoryFailed = (state, {}) => ({...state, fetching: false});
 
 /* ------------- Hookup Reducers To Types ------------- */
 export const reducer = createReducer(INITIAL_STATE, {
     [Types.GET_STORY]: startAsyncReq,
     [Types.SAVE_STORY]: startAsyncReq,
     [Types.GET_STORY_SUCCEEDED]: getStorySucceeded,
+    [Types.GET_STORY_FAILED]: getStoryFailed,
     [Types.SAVE_STORY_SUCCEEDED]: saveStorySucceeded,
+    [Types.SAVE_STORY_FAILED]: saveStoryFailed,
 });

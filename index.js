@@ -1,10 +1,13 @@
 import React from 'react';
-import {render} from 'react-dom';
+import { render } from 'react-dom';
 import Main from "./src/Main";
 import Provider from "react-redux/es/components/Provider";
-import {store} from "./src/redux/store";
+import { store, history } from "./src/redux/store";
 import './css/styles.css';
+import { ConnectedRouter } from 'connected-react-router';
 
 render(<Provider store={store}>
-    <Main/>
+    <ConnectedRouter history={history}>
+        <Main />
+    </ConnectedRouter>
 </Provider>, document.getElementById('app'));
