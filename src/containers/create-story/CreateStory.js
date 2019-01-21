@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import React, {Component} from 'react';
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import Button from "@material-ui/core/es/Button/Button";
-import { withStyles } from '@material-ui/core/styles';
-import { Field, reduxForm, FieldArray } from 'redux-form';
+import {withStyles} from '@material-ui/core/styles';
+import {Field, reduxForm, FieldArray} from 'redux-form';
 import TextField from '@material-ui/core/TextField';
 import StoryCreators from '../story/StoryRedux';
 
@@ -21,14 +21,12 @@ const styles = {
         padding: '0 16px 16px',
         marginTop: 16
     },
-    buttonsWrapper: {
-
-    }
+    buttonsWrapper: {}
 };
 
 class CreateStory extends Component {
 
-    renderField = ({ input, meta: {error, touched}, ...props }) => {
+    renderField = ({input, meta: {error, touched}, ...props}) => {
         return (<TextField
             {...input}
             error={touched && !!error}
@@ -41,15 +39,15 @@ class CreateStory extends Component {
         />)
     };
 
-    renderSections = ({ fields, meta: { error, touched }, classes }) => (
+    renderSections = ({fields, meta: {error, touched}, classes}) => (
         <Grid container justify="center">
             <Grid item xs={12}>
                 {fields.map((parentName, index) => (
                     <div key={index} className={classes.section}>
                         <Field name={`${parentName}.title`} component={this.renderField}
-                            label="Section Title" multiline />
+                               label="Section Title" multiline/>
                         <Field name={`${parentName}.body`} component={this.renderField}
-                            label="Text" multiline />
+                               label="Text" multiline/>
                     </div>
                 ))}
             </Grid>
@@ -68,19 +66,19 @@ class CreateStory extends Component {
     };
 
     render() {
-        const { classes, handleSubmit } = this.props;
+        const {classes, handleSubmit, story: {fetching}} = this.props;
         return (
             <form onSubmit={handleSubmit(this.onSubmit)}>
                 <Grid container justify="center">
                     <Grid item xs={12} sm="auto" className={classes.container}>
-                            <Field name="title" component={this.renderField}
-                                label="Title" autoFocus variant="outlined" />
-                            <FieldArray name={'sections'} component={this.renderSections} classes={classes} />
+                        <Field name="title" component={this.renderField}
+                               label="Title" autoFocus variant="outlined"/>
+                        <FieldArray name={'sections'} component={this.renderSections} classes={classes}/>
                     </Grid>
-                    <Grid item xs={12} sm="auto" className={classes.container}>
-                        <Grid container justify="flex-end" >
+                    <Grid item xs={12} className={classes.container}>
+                        <Grid container justify="flex-end">
                             <Grid item>
-                                <Button type="submit" variant="contained" color="primary">
+                                <Button type="submit" variant="contained" color="primary" disabled={fetching}>
                                     Submit
                                 </Button>
                             </Grid>
@@ -100,7 +98,7 @@ const validate = values => {
     errors.sections = [];
     values.sections && values.sections.forEach((s, index) => {
         const sectionsErrors = {};
-        if(!s.body) {
+        if (!s.body) {
             sectionsErrors.body = 'Required';
         }
         errors.sections[index] = sectionsErrors;
@@ -108,13 +106,13 @@ const validate = values => {
     return errors
 };
 
-const mapStateToProps = ({ app }) => ({ app });
+const mapStateToProps = ({story}) => ({story});
 
 const mapDispatchToProps = dispatch => bindActionCreators({saveStory}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)
-    (withStyles(styles)
-        (reduxForm({
-            form: 'CreateStory',
-            validate,
-        })(CreateStory)));
+(withStyles(styles)
+(reduxForm({
+    form: 'CreateStory',
+    validate,
+})(CreateStory)));
