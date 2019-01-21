@@ -4,9 +4,11 @@ import { bindActionCreators } from "redux";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import Button from "@material-ui/core/es/Button/Button";
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import { Field, reduxForm, FieldArray } from 'redux-form';
 import TextField from '@material-ui/core/TextField';
+import StoryCreators from '../story/StoryRedux';
+
+const {saveStory} = StoryCreators;
 
 const styles = {
     container: {
@@ -57,23 +59,23 @@ class CreateStory extends Component {
                 </Button>
             </Grid>
         </Grid>
-    )
+    );
 
     onSubmit = values => {
-        console.log(values)
+        const {saveStory} = this.props;
+        console.log(values);
+        saveStory(values);
     };
 
     render() {
         const { classes, handleSubmit } = this.props;
         return (
-            <div>
+            <form onSubmit={handleSubmit(this.onSubmit)}>
                 <Grid container justify="center">
                     <Grid item xs={12} sm="auto" className={classes.container}>
-                        <form onSubmit={handleSubmit(this.onSubmit)}>
                             <Field name="title" component={this.renderField}
                                 label="Title" autoFocus variant="outlined" />
                             <FieldArray name={'sections'} component={this.renderSections} classes={classes} />
-                        </form>
                     </Grid>
                     <Grid item xs={12} sm="auto" className={classes.container}>
                         <Grid container justify="flex-end" >
@@ -85,28 +87,34 @@ class CreateStory extends Component {
                         </Grid>
                     </Grid>
                 </Grid>
-            </div>
+            </form>
         );
     }
 }
 
 const validate = values => {
-    const errors = {}
-    console.log('validate', values)
+    const errors = {};
     if (!values.title) {
         errors.title = 'Required'
     }
+    errors.sections = [];
+    values.sections && values.sections.forEach((s, index) => {
+        const sectionsErrors = {};
+        if(!s.body) {
+            sectionsErrors.body = 'Required';
+        }
+        errors.sections[index] = sectionsErrors;
+    });
     return errors
-}
+};
 
 const mapStateToProps = ({ app }) => ({ app });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({saveStory}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)
     (withStyles(styles)
         (reduxForm({
             form: 'CreateStory',
             validate,
-        })
-            (CreateStory)));
+        })(CreateStory)));
