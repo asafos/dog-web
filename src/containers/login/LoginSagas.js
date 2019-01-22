@@ -1,7 +1,8 @@
 import { call, put, all, takeLatest } from 'redux-saga/effects'
 import axios from 'axios';
 import {LoginTypes} from './LoginRedux';
-// worker Saga: will be fired on USER_FETCH_REQUESTED actions
+import { push } from 'connected-react-router'
+
 function* getUser(action) {
     try {
         const res = yield call(() => axios.get('/api/users/current'));
@@ -15,6 +16,7 @@ function* signup(action) {
     try {
         const user = yield call(() => axios.post('/api/users/signup', action));
         yield put({type: LoginTypes.SIGNUP_SUCCEEDED, user: user});
+        yield put(push('/auth/login?email=' + action.email));
     } catch (error) {
         yield put({type: LoginTypes.SIGNUP_FAILED, error});
     }

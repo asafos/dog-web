@@ -48,7 +48,7 @@ class App extends Component {
                 <div className={classes.container}>
                     <Switch>
                         <Route path="/" exact component={Home} />
-                        <Route path="/story" component={Story} />
+                        <Route path="/story/:storyId" component={Story} />
                         <Route path="/create-story" component={CreateStory} />
                     </Switch>
                 </div>

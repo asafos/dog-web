@@ -1,6 +1,7 @@
 import { call, put, all, takeLatest } from 'redux-saga/effects'
 import axios from 'axios';
 import {StoryTypes} from './StoryRedux';
+import { push } from 'connected-react-router'
 import NotificationCreators from '../../components/notification/NotificationRedux';
 import StoryCreators from './StoryRedux';
 
@@ -23,6 +24,7 @@ function* saveStorySaga(action) {
         yield put(saveStorySucceeded());
         yield put(showNotification('Story saved'));
         yield put(getStory(res.data.story._id));
+        yield put(push('/story/' + res.data.story._id));
     } catch (error) {
         yield put(saveStoryFailed(error));
     }

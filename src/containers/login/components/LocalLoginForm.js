@@ -40,6 +40,13 @@ const styles = {
 
 class LocalLoginForm extends Component {
 
+    componentDidMount() {
+        const {initialize, location} = this.props;
+        const urlParams = new URLSearchParams(location.search);
+        const email = urlParams.get('email');
+        initialize({email});
+    }
+
     renderTextField = ({ meta: { touched, error }, input, ...props }) => {
         const { classes } = this.props;
         return (
@@ -96,7 +103,7 @@ class LocalLoginForm extends Component {
 }
 
 const validate = values => {
-    const errors = {}
+    const errors = {};
     if (!values.password) {
         errors.password = 'Required'
     }
@@ -106,7 +113,7 @@ const validate = values => {
         errors.email = 'Invalid email address'
     }
     return errors
-}
+};
 
 
 export default reduxForm({

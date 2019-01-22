@@ -10,7 +10,6 @@ const {Types, Creators} = createActions({
     signup: ['email', 'password'],
     signupSucceeded: null,
     signupFailed: null,
-    getUserFailed: null,
     login: ['email', 'password'],
     loginSucceeded: null,
     loginFailed: null,
