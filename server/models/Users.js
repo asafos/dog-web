@@ -8,6 +8,8 @@ const UsersSchema = new Schema({
   email: String,
   hash: String,
   salt: String,
+  stories: Array,
+  favorites: Array
 });
 
 UsersSchema.methods.setPassword = function(password) {
@@ -39,5 +41,10 @@ UsersSchema.methods.toAuthJSON = function() {
     token: this.generateJWT(),
   };
 };
+
+UsersSchema.methods.addStory = function(storyId) {
+  this.stories.push(storyId);
+  return this.stories;
+}
 
 mongoose.model('Users', UsersSchema);

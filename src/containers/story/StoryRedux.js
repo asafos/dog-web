@@ -3,9 +3,12 @@ import {createReducer, createActions} from 'reduxsauce'
 /* ------------- Types and Action Creators ------------- */
 
 const {Types, Creators} = createActions({
-    getStory: ['storyId'],
-    getStorySucceeded: ['story'],
-    getStoryFailed: ['error'],
+    getStoryByStoryId: ['storyId'],
+    getStoryByStoryIdSucceeded: ['story'],
+    getStoryByStoryIdFailed: ['error'],
+    getStoriesByUserId: null,
+    getStoriesByUserIdSucceeded: ['stories'],
+    getStoriesByUserIdFailed: ['error'],
     saveStory: ['story'],
     saveStorySucceeded: null,
     saveStoryFailed: ['error'],
@@ -17,23 +20,30 @@ export default Creators;
 /* ------------- Initial State ------------- */
 
 export const INITIAL_STATE = {
-    fetching: false
+    fetching: false,
+    content: [],
+    currentStory: {}
 };
 
 /* ------------- Reducers ------------- */
 
 const startAsyncReq = (state, {}) => ({...state, fetching: true});
-const getStorySucceeded = (state, {story}) => ({...state, ...story, fetching: false});
-const getStoryFailed = (state, {}) => ({...state, fetching: false});
+const getStoryByStoryIdSucceeded = (state, {story}) => ({...state, currentStory: story, fetching: false});
+const getStoryByStoryIdFailed = (state, {}) => ({...state, fetching: false});
+const getStoriesByUserIdSucceeded = (state, {stories}) => ({...state, content: stories, fetching: false});
+const getStoriesByUserIdFailed = (state, {}) => ({...state, fetching: false});
 const saveStorySucceeded = (state, {}) => ({...state, fetching: false});
 const saveStoryFailed = (state, {}) => ({...state, fetching: false});
 
 /* ------------- Hookup Reducers To Types ------------- */
 export const reducer = createReducer(INITIAL_STATE, {
-    [Types.GET_STORY]: startAsyncReq,
+    [Types.GET_STORIES_BY_USER_ID]: startAsyncReq,
+    [Types.GET_STORY_BY_STORY_ID]: startAsyncReq,
     [Types.SAVE_STORY]: startAsyncReq,
-    [Types.GET_STORY_SUCCEEDED]: getStorySucceeded,
-    [Types.GET_STORY_FAILED]: getStoryFailed,
+    [Types.GET_STORIES_BY_USER_ID_SUCCEEDED]: getStoriesByUserIdSucceeded,
+    [Types.GET_STORIES_BY_USER_ID_FAILED]: getStoriesByUserIdFailed,
+    [Types.GET_STORY_BY_STORY_ID_SUCCEEDED]: getStoryByStoryIdSucceeded,
+    [Types.GET_STORY_BY_STORY_ID_FAILED]: getStoryByStoryIdFailed,
     [Types.SAVE_STORY_SUCCEEDED]: saveStorySucceeded,
     [Types.SAVE_STORY_FAILED]: saveStoryFailed,
 });
