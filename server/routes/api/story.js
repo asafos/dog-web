@@ -19,7 +19,7 @@ router.post('/', isAuthenticated, async (req, res, next) => {
         const createdAt = new Date();
         const story = new Story({ createdAt, content: body, ups: 0, writer: req.user._id });
         const savedStory = await story.save();
-        await user.addStory(savedStory._id);
+        // await user.addStory(savedStory._id);
         res.status(200).json({ story });
     } catch (e) {
         res.status(500).json(e);
@@ -48,7 +48,7 @@ router.get('/byUserId', isAuthenticated, async (req, res, next) => {
     const { user } = req;
 
     try {
-        const stories = await Story.find({_id: user.stories});
+        const stories = await Story.find({writer: user._id});
         if (!stories) {
             return res.status(404).json({ errors: { stories: 'were not found' } });
         }
