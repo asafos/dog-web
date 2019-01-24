@@ -61,12 +61,11 @@ class CreateStory extends Component {
 
     onSubmit = values => {
         const {saveStory} = this.props;
-        console.log(values);
         saveStory(values);
     };
 
     render() {
-        const {classes, handleSubmit, story: {fetching}} = this.props;
+        const {classes, handleSubmit, stories: {fetching}} = this.props;
         return (
             <form onSubmit={handleSubmit(this.onSubmit)}>
                 <Grid container justify="center">
@@ -106,7 +105,7 @@ const validate = values => {
     return errors
 };
 
-const mapStateToProps = ({story}) => ({story});
+const mapStateToProps = ({stories}) => ({stories});
 
 const mapDispatchToProps = dispatch => bindActionCreators({saveStory}, dispatch);
 

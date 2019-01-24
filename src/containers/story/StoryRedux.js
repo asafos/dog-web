@@ -22,7 +22,9 @@ export default Creators;
 export const INITIAL_STATE = {
     fetching: false,
     content: [],
-    currentStory: {}
+    currentStory: {
+        content: {}
+    }
 };
 
 /* ------------- Reducers ------------- */

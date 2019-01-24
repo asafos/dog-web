@@ -4,9 +4,9 @@ import {bindActionCreators} from "redux";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import StoryCreators from './StoryRedux';
+import StoryCreators from '../story/StoryRedux';
 
-const {getStoryByStoryId} = StoryCreators;
+const {getStoriesByUserId} = StoryCreators;
 
 const styles = {
     container: {},
@@ -32,15 +32,15 @@ const styles = {
     }
 };
 
-class Story extends Component {
+class MyStories extends Component {
 
     componentDidMount() {
-        const {getStoryByStoryId, match} = this.props;
-        getStoryByStoryId(match.params.storyId);
+        const {getStoriesByUserId} = this.props;
+        getStoriesByUserId();
     }
 
     render() {
-        const {classes, stories: {fetching, currentStory: {content: {title, sections = []}}}} = this.props;
+        const {classes, stories: {fetching, content}, history} = this.props;
 
         if (fetching) return null;
 
@@ -48,15 +48,12 @@ class Story extends Component {
             <Grid container justify="center" className={classes.container}>
                 <Grid item xs={12} sm="auto" className={classes.contentWrapper}>
                     <Typography variant="h1" className={classes.storyTitle} gutterBottom>
-                        {title}
+                        My Stories
                     </Typography>
-                    {sections.map(({title, body}, index) => (
-                        <div key={index}>
+                    {content.map(({content: {title, body}, writer, _id}, index) => (
+                        <div key={index} onClick={() => history.push('/story/' + _id)}>
                             <Typography variant="subtitle1" className={classes.storySubtitle} gutterBottom>
                                 {title}
-                            </Typography>
-                            <Typography variant="body1" className={classes.p} gutterBottom>
-                                {body}
                             </Typography>
                         </div>
                     ))}
@@ -68,6 +65,6 @@ class Story extends Component {
 
 const mapStateToProps = ({stories}) => ({stories});
 
-const mapDispatchToProps = dispatch => bindActionCreators({getStoryByStoryId}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({getStoriesByUserId}, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Story));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(MyStories));

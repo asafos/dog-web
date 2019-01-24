@@ -70,5 +70,8 @@
     "redux-saga": "^0.16.2",
     "redux-thunk": "^2.3.0",
     "reduxsauce": "^1.0.1"
+  },
+  "nodemonConfig": {
+    "ignore": ["src/*"]
   }
 }

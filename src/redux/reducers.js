@@ -1,5 +1,5 @@
 import {reducer as app} from '../containers/app/AppRedux';
-import {reducer as story} from '../containers/story/StoryRedux';
+import {reducer as stories} from '../containers/story/StoryRedux';
 import {reducer as auth} from '../containers/login/LoginRedux';
 import {reducer as notification} from '../components/notification/NotificationRedux';
 import {i18nReducer as i18n} from 'react-redux-i18n';
@@ -13,5 +13,5 @@ export default (history) => ({
     i18n,
     notification,
     router: connectRouter(history),
-    story,
+    stories,
 });

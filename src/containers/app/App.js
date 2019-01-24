@@ -9,6 +9,7 @@ import Story from '../story/Story';
 import CreateStory from '../create-story/CreateStory';
 import LoginCreators from '../login/LoginRedux';
 import Notification from '../../components/notification/Notification';
+import MyStories from "../my-stories/MyStories";
 
 const { getUser, logout } = LoginCreators;
 
@@ -37,19 +38,19 @@ class App extends Component {
     }
 
     render() {
-        const { classes, history, auth, logout } = this.props;
-        console.log('auth', auth);
-        if (auth.fetching) {
+        const { classes, history, auth: {user, fetching}, logout } = this.props;
+        if (fetching) {
             return null
         }
         return (
             <div>
-                <Header history={history} logout={logout} />
+                <Header history={history} logout={logout} username={user.name || user.email}/>
                 <div className={classes.container}>
                     <Switch>
                         <Route path="/" exact component={Home} />
                         <Route path="/story/:storyId" component={Story} />
                         <Route path="/create-story" component={CreateStory} />
+                        <Route path="/my-stories" component={MyStories} />
                     </Switch>
                 </div>
                 <Notification />
