@@ -27,6 +27,26 @@ router.post('/', isAuthenticated, async (req, res, next) => {
     }
 });
 
+router.delete('/:storyId', isAuthenticated, async (req, res, next) => {
+    const { user, params: { storyId } } = req;
+
+    if (!storyId) {
+        return res.status(422).json({ errors: { storyId: 'is required' } });
+    }
+
+    try {
+        const story = await Story.findOne({ _id: storyId });
+        if (story.writer !== user._id) {
+            return res.status(403).json({ errors: { user: 'not allowed to do this process' } });            
+        }
+        await Storage.remove({_id: storyId}, {justOne: true})
+        res.status(200).json({ story });
+    } catch (e) {
+        res.status(500).json(e);
+        console.error(e);
+    }
+});
+
 router.get('/byStoryId/:id', isAuthenticated, async (req, res, next) => {
     const { params: { id } } = req;
 

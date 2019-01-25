@@ -1,14 +1,17 @@
-import React, {Component} from 'react';
-import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
+import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import Button from "@material-ui/core/es/Button/Button";
-import {withStyles} from '@material-ui/core/styles';
-import {Field, reduxForm, FieldArray} from 'redux-form';
+import { withStyles } from '@material-ui/core/styles';
+import { Field, reduxForm, FieldArray } from 'redux-form';
 import TextField from '@material-ui/core/TextField';
 import StoryCreators from '../story/StoryRedux';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Fab from '@material-ui/core/Fab';
 
-const {saveStory} = StoryCreators;
+const { saveStory } = StoryCreators;
 
 const styles = {
     container: {
@@ -19,14 +22,25 @@ const styles = {
         border: '1px solid rgba(0, 0, 0, 0.23)',
         borderRadius: 4,
         padding: '0 16px 16px',
-        marginTop: 16
+        marginTop: 16,
+        position: 'relative'
     },
-    buttonsWrapper: {}
+    buttonsWrapper: {},
+    removeSection: {
+        position: 'absolute',
+        top: -12,
+        right: -12,
+        backgroundColor: '#f4483b',
+        color: 'white',
+        '&:hover': {
+            backgroundColor: '#fb766c',
+        }
+    }
 };
 
 class CreateStory extends Component {
 
-    renderField = ({input, meta: {error, touched}, ...props}) => {
+    renderField = ({ input, meta: { error, touched }, ...props }) => {
         return (<TextField
             {...input}
             error={touched && !!error}
@@ -39,19 +53,24 @@ class CreateStory extends Component {
         />)
     };
 
-    renderSections = ({fields, meta: {error, touched}, classes}) => (
+    renderSections = ({ fields, meta: { error, touched }, classes }) => (
         <Grid container justify="center">
             <Grid item xs={12}>
                 {fields.map((parentName, index) => (
                     <div key={index} className={classes.section}>
+                        <Fab onClick={() => fields.splice(index, 1)}
+                            size="small"
+                            className={classes.removeSection}>
+                            <DeleteIcon />
+                        </Fab>
                         <Field name={`${parentName}.title`} component={this.renderField}
-                               label="Section Title" multiline/>
+                            label="Section Title" multiline />
                         <Field name={`${parentName}.body`} component={this.renderField}
-                               label="Text" multiline/>
+                            label="Text" multiline />
                     </div>
                 ))}
             </Grid>
-            <Grid item style={{marginTop: 16}}>
+            <Grid item style={{ marginTop: 16 }}>
                 <Button onClick={() => fields.push({})}>
                     Add Section
                 </Button>
@@ -60,19 +79,21 @@ class CreateStory extends Component {
     );
 
     onSubmit = values => {
-        const {saveStory} = this.props;
+        const { saveStory } = this.props;
         saveStory(values);
     };
 
     render() {
-        const {classes, handleSubmit, stories: {fetching}} = this.props;
+        const { classes, handleSubmit, stories: { fetching } } = this.props;
         return (
             <form onSubmit={handleSubmit(this.onSubmit)}>
                 <Grid container justify="center">
                     <Grid item xs={12} sm="auto" className={classes.container}>
                         <Field name="title" component={this.renderField}
-                               label="Title" autoFocus variant="outlined"/>
-                        <FieldArray name={'sections'} component={this.renderSections} classes={classes}/>
+                            label="Title" variant="outlined" />
+                        <Field name="summary" component={this.renderField}
+                            label="Summary" variant="outlined" multiline />
+                        <FieldArray name={'sections'} component={this.renderSections} classes={classes} />
                     </Grid>
                     <Grid item xs={12} className={classes.container}>
                         <Grid container justify="flex-end">
@@ -105,13 +126,13 @@ const validate = values => {
     return errors
 };
 
-const mapStateToProps = ({stories}) => ({stories});
+const mapStateToProps = ({ stories }) => ({ stories });
 
-const mapDispatchToProps = dispatch => bindActionCreators({saveStory}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ saveStory }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)
-(withStyles(styles)
-(reduxForm({
-    form: 'CreateStory',
-    validate,
-})(CreateStory)));
+    (withStyles(styles)
+        (reduxForm({
+            form: 'CreateStory',
+            validate,
+        })(CreateStory)));

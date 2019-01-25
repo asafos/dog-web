@@ -1,12 +1,19 @@
-import React, {Component} from 'react';
-import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
+import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import Grid from "@material-ui/core/es/Grid/Grid";
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import StoryCreators from '../story/StoryRedux';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-const {getStoriesByUserId} = StoryCreators;
+const { getStoriesByUserId } = StoryCreators;
 
 const styles = {
     container: {},
@@ -23,24 +30,20 @@ const styles = {
         color: 'rgba(0,0,0,.84)',
         letterSpacing: 0,
     },
-    p: {
-        fontFamily: 'medium-content-serif-font,Georgia,Cambria,"Times New Roman",Times,serif',
-        fontSize: 21,
-        lineHeight: 1.58,
-        letterSpacing: '-.003em',
-        color: 'rgba(0,0,0,.84)'
+    storyItem: {
+        height: '5em'
     }
 };
 
 class MyStories extends Component {
 
     componentDidMount() {
-        const {getStoriesByUserId} = this.props;
+        const { getStoriesByUserId } = this.props;
         getStoriesByUserId();
     }
 
     render() {
-        const {classes, stories: {fetching, content}, history} = this.props;
+        const { classes, stories: { fetching, content }, history } = this.props;
 
         if (fetching) return null;
 
@@ -50,21 +53,29 @@ class MyStories extends Component {
                     <Typography variant="h1" className={classes.storyTitle} gutterBottom>
                         My Stories
                     </Typography>
-                    {content.map(({content: {title, body}, writer, _id}, index) => (
-                        <div key={index} onClick={() => history.push('/story/' + _id)}>
-                            <Typography variant="subtitle1" className={classes.storySubtitle} gutterBottom>
-                                {title}
-                            </Typography>
-                        </div>
-                    ))}
+                    <List dense className={classes.root}>
+                        {content.map(({ content: { title, summary }, writer, _id }, index) => (
+                            <ListItem key={index} button className={classes.storyItem} onClick={() => history.push('/story/' + _id)}>
+                                <ListItemText primary={title} secondary={summary}/>
+                                <ListItemSecondaryAction>
+                                    <IconButton onClick={() => history.push('/story/' + _id)}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                    <IconButton onClick={() => history.push('/story/' + _id)}>
+                                        <EditIcon />
+                                    </IconButton>
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                        ))}
+                    </List>
                 </Grid>
             </Grid>
         );
     }
 }
 
-const mapStateToProps = ({stories}) => ({stories});
+const mapStateToProps = ({ stories }) => ({ stories });
 
-const mapDispatchToProps = dispatch => bindActionCreators({getStoriesByUserId}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getStoriesByUserId }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(MyStories));

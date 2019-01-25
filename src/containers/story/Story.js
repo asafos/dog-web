@@ -16,11 +16,20 @@ const styles = {
     },
     storyTitle: {
         fontFamily: 'medium-content-serif-font,Georgia,Cambria,"Times New Roman",Times,serif',
-        fontSize: 34,
+        fontSize: 42,
         lineHeight: '1.25em',
         fontStyle: 'normal!important',
-        fontWeight: '500!important',
+        fontWeight: '400!important',
         color: 'rgba(0,0,0,.84)',
+        letterSpacing: 0,
+    },
+    storySummary: {
+        fontFamily: 'medium-content-serif-font,Georgia,Cambria,"Times New Roman",Times,serif',
+        fontSize: 20,
+        lineHeight: '1.25em',
+        fontStyle: 'normal!important',
+        fontWeight: '400!important',
+        color: 'rgba(0,0,0,.54)',
         letterSpacing: 0,
     },
     p: {
@@ -28,7 +37,20 @@ const styles = {
         fontSize: 21,
         lineHeight: 1.58,
         letterSpacing: '-.003em',
-        color: 'rgba(0,0,0,.84)'
+        color: 'rgba(0,0,0,.84)',
+        whiteSpace: 'pre-wrap',
+    },
+    sectionTitle: {
+        fontFamily: 'medium-content-serif-font,Georgia,Cambria,"Times New Roman",Times,serif',
+        fontSize: 26,
+        fontWeight: '600!important',
+        lineHeight: '1.22em',
+    },
+    section: {
+        marginTop: '28px'
+    },
+    topContainer: {
+        marginBottom: '4em'
     }
 };
 
@@ -40,19 +62,24 @@ class Story extends Component {
     }
 
     render() {
-        const {classes, stories: {fetching, currentStory: {content: {title, sections = []}}}} = this.props;
+        const {classes, stories: {fetching, currentStory: {content: {title, summary, sections = []}}}} = this.props;
 
         if (fetching) return null;
 
         return (
             <Grid container justify="center" className={classes.container}>
                 <Grid item xs={12} sm="auto" className={classes.contentWrapper}>
+                <div className={classes.topContainer}>
                     <Typography variant="h1" className={classes.storyTitle} gutterBottom>
                         {title}
                     </Typography>
+                    <Typography variant="p" className={classes.storySummary} gutterBottom>
+                        {summary}
+                    </Typography>
+                </div>
                     {sections.map(({title, body}, index) => (
-                        <div key={index}>
-                            <Typography variant="subtitle1" className={classes.storySubtitle} gutterBottom>
+                        <div key={index} className={classes.section}>
+                            <Typography variant="subtitle1" className={classes.sectionTitle} gutterBottom>
                                 {title}
                             </Typography>
                             <Typography variant="body1" className={classes.p} gutterBottom>

@@ -38,8 +38,21 @@ function* saveStorySaga(action) {
     }
 }
 
+function* removeStorySaga(action) {
+    try {
+        const res = yield call(() => axios.delete('/api/story' + action.id));
+        yield put(saveStorySucceeded());
+        yield put(showNotification('Story deleted'));
+        yield put(getStoryByStoryId(res.data.story._id));
+        yield put(push('/story/' + res.data.story._id));
+    } catch (error) {
+        yield put(saveStoryFailed(error));
+    }
+}
+
 function* sagas() {
     yield all([
+        takeLatest(StoryTypes.REMOVE_STORY, removeStorySaga),
         takeLatest(StoryTypes.GET_STORIES_BY_USER_ID, getStoriesByUserIdSaga),
         takeLatest(StoryTypes.GET_STORY_BY_STORY_ID, getStoryByStoryIdSaga),
         takeLatest(StoryTypes.SAVE_STORY, saveStorySaga),
