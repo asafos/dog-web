@@ -1,12 +1,22 @@
 import { call, put, all, takeLatest } from 'redux-saga/effects'
 import axios from 'axios';
-import {StoryTypes} from './StoryRedux';
+import { StoryTypes } from './StoryRedux';
 import { push } from 'connected-react-router'
 import NotificationCreators from '../../components/notification/NotificationRedux';
 import StoryCreators from './StoryRedux';
 
-const {getStoryByStoryIdSucceeded, getStoryByStoryIdFailed, getStoryByStoryId, getStoriesByUserIdSucceeded, getStoriesByUserIdFailed, saveStorySucceeded, saveStoryFailed} = StoryCreators;
-const {showNotification} = NotificationCreators;
+const {
+    getStoryByStoryIdSucceeded,
+    getStoryByStoryIdFailed,
+    getStoryByStoryId,
+    getStoriesByUserIdSucceeded,
+    getStoriesByUserIdFailed,
+    saveStorySucceeded,
+    saveStoryFailed,
+    removeStorySucceeded,
+    removeStoryFailed
+} = StoryCreators;
+const { showNotification } = NotificationCreators;
 
 function* getStoryByStoryIdSaga(action) {
     try {
@@ -38,21 +48,19 @@ function* saveStorySaga(action) {
     }
 }
 
-// function* removeStorySaga(action) {
-//     try {
-//         const res = yield call(() => axios.delete('/api/story' + action.id));
-//         yield put(saveStorySucceeded());
-//         yield put(showNotification('Story deleted'));
-//         yield put(getStoryByStoryId(res.data.story._id));
-//         yield put(push('/story/' + res.data.story._id));
-//     } catch (error) {
-//         yield put(saveStoryFailed(error));
-//     }
-// }
+function* removeStorySaga(action) {
+    try {
+        const res = yield call(() => axios.delete('/api/story/' + action.storyId));
+        yield put(removeStorySucceeded(res.data.stories));
+        yield put(showNotification('Story deleted'));
+    } catch (error) {
+        yield put(removeStoryFailed(error));
+    }
+}
 
 function* sagas() {
     yield all([
-        // takeLatest(StoryTypes.REMOVE_STORY, removeStorySaga),
+        takeLatest(StoryTypes.REMOVE_STORY, removeStorySaga),
         takeLatest(StoryTypes.GET_STORIES_BY_USER_ID, getStoriesByUserIdSaga),
         takeLatest(StoryTypes.GET_STORY_BY_STORY_ID, getStoryByStoryIdSaga),
         takeLatest(StoryTypes.SAVE_STORY, saveStorySaga),

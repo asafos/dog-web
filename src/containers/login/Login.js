@@ -10,6 +10,7 @@ import { Route, Switch } from "react-router-dom";
 import SignupForm from "./components/SignupForm";
 import { SITE_NAME } from '../../constants/appData';
 import Typography from '@material-ui/core/Typography';
+import Hidden from '@material-ui/core/Hidden';
 
 const { googleLogin, signup, login } = LoginCreators;
 
@@ -43,8 +44,22 @@ class Login extends Component {
         }
     }
 
+    renderContent = () => {
+        const { login, signup } = this.props;
+        return (
+            <Grid container>
+                <Grid item style={{ width: '100%' }}>
+                    <Switch>
+                        <Route path="/auth/login" component={props => <LocalLoginForm {...props} login={login} />} />
+                        <Route path="/auth/signup" component={props => <SignupForm {...props} signup={signup} />} />
+                    </Switch>
+                </Grid>
+            </Grid>
+        )
+    };
+
     render() {
-        const { classes, login, signup } = this.props;
+        const { classes } = this.props;
         return (
             <Grid container justify="space-evenly" alignItems="center"
                 direction="column" className={classes.container}>
@@ -54,16 +69,14 @@ class Login extends Component {
                         {SITE_NAME}
                     </Typography>
                 </Grid>
+                <Hidden xsDown>
                 <Grid item className={classes.loginWrapper} component={Paper}>
-                    <Grid container>
-                        <Grid item style={{ width: '100%' }}>
-                            <Switch>
-                                <Route path="/auth/login" component={props => <LocalLoginForm {...props} login={login} />} />
-                                <Route path="/auth/signup" component={props => <SignupForm {...props} signup={signup} />} />
-                            </Switch>
-                        </Grid>
-                    </Grid>
+                    {this.renderContent()}
                 </Grid>
+                </Hidden>
+                <Hidden smUp>
+                    {this.renderContent()}
+                </Hidden>
             </Grid>
         );
     }

@@ -13,7 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-const { getStoriesByUserId } = StoryCreators;
+const { getStoriesByUserId, removeStory } = StoryCreators;
 
 const styles = {
     container: {},
@@ -43,7 +43,7 @@ class MyStories extends Component {
     }
 
     render() {
-        const { classes, stories: { fetching, content }, history } = this.props;
+        const { classes, stories: { fetching, content }, history, removeStory} = this.props;
 
         if (fetching) return null;
 
@@ -58,7 +58,7 @@ class MyStories extends Component {
                             <ListItem key={index} button className={classes.storyItem} onClick={() => history.push('/story/' + _id)}>
                                 <ListItemText primary={title} secondary={summary}/>
                                 <ListItemSecondaryAction>
-                                    <IconButton onClick={() => history.push('/story/' + _id)}>
+                                    <IconButton onClick={() => removeStory(_id)}>
                                         <DeleteIcon />
                                     </IconButton>
                                     <IconButton onClick={() => history.push('/story/' + _id)}>
@@ -76,6 +76,6 @@ class MyStories extends Component {
 
 const mapStateToProps = ({ stories }) => ({ stories });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getStoriesByUserId }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getStoriesByUserId, removeStory }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(MyStories));

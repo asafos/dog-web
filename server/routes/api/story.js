@@ -36,11 +36,12 @@ router.delete('/:storyId', isAuthenticated, async (req, res, next) => {
 
     try {
         const story = await Story.findOne({ _id: storyId });
-        if (story.writer !== user._id) {
+        if (story.writer != user._id) {
             return res.status(403).json({ errors: { user: 'not allowed to do this process' } });            
         }
-        await Storage.remove({_id: storyId}, {justOne: true})
-        res.status(200).json({ story });
+        await Story.remove({_id: storyId});
+        const stories = await Story.find({writer: user._id});
+        res.status(200).json({ stories });
     } catch (e) {
         res.status(500).json(e);
         console.error(e);
