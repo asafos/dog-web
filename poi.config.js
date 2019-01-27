@@ -1,11 +1,15 @@
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const isProd = process.env.NODE_ENV === 'production';
+const {SITE_NAME} = require('./src/constants/appData');
 
 module.exports = {
-    output: !isProd ? undefined : {
+    output: {
         // publicUrl: './',
-        fileNames: {
+        fileNames: !isProd ? undefined : {
             js: '[name].[chunkhash:8].js'
+        },
+        html: {
+            title: SITE_NAME
         }
     },
     // assets: {

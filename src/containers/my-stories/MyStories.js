@@ -12,6 +12,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const { getStoriesByUserId, removeStory } = StoryCreators;
 
@@ -37,13 +43,27 @@ const styles = {
 
 class MyStories extends Component {
 
+    state = { openRemoveModal: null };
+
     componentDidMount() {
         const { getStoriesByUserId } = this.props;
         getStoriesByUserId();
     }
 
+    openRemoveModal = (id) => this.setState({ openRemoveModal: id })
+
+    closeRemoveModal = () => this.setState({ openRemoveModal: null })
+
+    removeStory = () => {
+        const { removeStory } = this.props;
+        const { openRemoveModal } = this.state;
+        removeStory(openRemoveModal)
+        this.closeRemoveModal();
+    }
+
     render() {
-        const { classes, stories: { fetching, content }, history, removeStory} = this.props;
+        const { classes, stories: { fetching, content }, history } = this.props;
+        const { openRemoveModal } = this.state;
 
         if (fetching) return null;
 
@@ -56,18 +76,33 @@ class MyStories extends Component {
                     <List dense className={classes.root}>
                         {content.map(({ content: { title, summary }, writer, _id }, index) => (
                             <ListItem key={index} button className={classes.storyItem} onClick={() => history.push('/story/' + _id)}>
-                                <ListItemText primary={title} secondary={summary}/>
+                                <ListItemText primary={title} secondary={summary} />
                                 <ListItemSecondaryAction>
-                                    <IconButton onClick={() => removeStory(_id)}>
+                                    <IconButton onClick={() => this.openRemoveModal(_id)}>
                                         <DeleteIcon />
                                     </IconButton>
-                                    <IconButton onClick={() => history.push('/story/' + _id)}>
+                                    <IconButton onClick={() => history.push('/create-story/' + _id)}>
                                         <EditIcon />
                                     </IconButton>
                                 </ListItemSecondaryAction>
                             </ListItem>
                         ))}
                     </List>
+                    <Dialog open={!!openRemoveModal} onClose={this.handleClose}>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Are you sure you want to delete this story?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.closeRemoveModal}>
+                                Cancel
+                              </Button>
+                            <Button onClick={this.removeStory} color="primary" autoFocus>
+                                Remove
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </Grid>
             </Grid>
         );

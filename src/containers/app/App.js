@@ -49,6 +49,7 @@ class App extends Component {
                     <Switch>
                         <Route path="/" exact component={Home} />
                         <Route path="/story/:storyId" component={Story} />
+                        <Route path="/create-story/:storyId" component={CreateStory} />
                         <Route path="/create-story" component={CreateStory} />
                         <Route path="/my-stories" component={MyStories} />
                     </Switch>

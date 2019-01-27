@@ -20,9 +20,11 @@ export const INITIAL_STATE = {
 
 /* ------------- Reducers ------------- */
 
-const resettable = resettableReducer(Types.HIDE_NOTIFICATION)
 const showNotification = (state, {message, error}) => ({...state, open: true, message, variant: error ? 'error' : 'success'});
+const hideNotification = (state, {}) => INITIAL_STATE;
+
 /* ------------- Hookup Reducers To Types ------------- */
 export const reducer = createReducer(INITIAL_STATE, {
-    [Types.SHOW_NOTIFICATION]: resettable(showNotification),
+    [Types.SHOW_NOTIFICATION]: showNotification,
+    [Types.HIDE_NOTIFICATION]: hideNotification
 });

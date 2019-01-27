@@ -12,6 +12,9 @@ const {Types, Creators} = createActions({
     saveStory: ['story'],
     saveStorySucceeded: null,
     saveStoryFailed: ['error'],
+    updateStory: ['story'],
+    updateStorySucceeded: null,
+    updateStoryFailed: ['error'],
     removeStory: ['storyId'],
     removeStorySucceeded: ['stories'],
     removeStoryFailed: ['error'],
@@ -39,6 +42,8 @@ const getStoriesByUserIdSucceeded = (state, {stories}) => ({...state, content: s
 const getStoriesByUserIdFailed = (state, {}) => ({...state, fetching: false});
 const saveStorySucceeded = (state, {}) => ({...state, fetching: false});
 const saveStoryFailed = (state, {}) => ({...state, fetching: false});
+const updateStorySucceeded = (state, {}) => ({...state, fetching: false});
+const updateStoryFailed = (state, {}) => ({...state, fetching: false});
 const removeStorySucceeded = (state, {stories}) => ({...state, fetching: false, content: stories});
 const removeStoryFailed = (state, {}) => ({...state, fetching: false});
 
@@ -47,6 +52,7 @@ export const reducer = createReducer(INITIAL_STATE, {
     [Types.GET_STORIES_BY_USER_ID]: startAsyncReq,
     [Types.GET_STORY_BY_STORY_ID]: startAsyncReq,
     [Types.SAVE_STORY]: startAsyncReq,
+    [Types.UPDATE_STORY]: startAsyncReq,
     [Types.REMOVE_STORY]: startAsyncReq,
     [Types.GET_STORIES_BY_USER_ID_SUCCEEDED]: getStoriesByUserIdSucceeded,
     [Types.GET_STORIES_BY_USER_ID_FAILED]: getStoriesByUserIdFailed,
@@ -54,6 +60,8 @@ export const reducer = createReducer(INITIAL_STATE, {
     [Types.GET_STORY_BY_STORY_ID_FAILED]: getStoryByStoryIdFailed,
     [Types.SAVE_STORY_SUCCEEDED]: saveStorySucceeded,
     [Types.SAVE_STORY_FAILED]: saveStoryFailed,
+    [Types.UPDATE_STORY_SUCCEEDED]: updateStorySucceeded,
+    [Types.UPDATE_STORY_FAILED]: updateStoryFailed,
     [Types.REMOVE_STORY_SUCCEEDED]: removeStorySucceeded,
     [Types.REMOVE_STORY_FAILED]: removeStoryFailed,
 });

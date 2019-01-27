@@ -8,11 +8,12 @@ import StoryCreators from './StoryRedux';
 const {
     getStoryByStoryIdSucceeded,
     getStoryByStoryIdFailed,
-    getStoryByStoryId,
     getStoriesByUserIdSucceeded,
     getStoriesByUserIdFailed,
     saveStorySucceeded,
     saveStoryFailed,
+    updateStorySucceeded,
+    updateStoryFailed,
     removeStorySucceeded,
     removeStoryFailed
 } = StoryCreators;
@@ -41,10 +42,20 @@ function* saveStorySaga(action) {
         const res = yield call(() => axios.post('/api/story', action.story));
         yield put(saveStorySucceeded());
         yield put(showNotification('Story saved'));
-        yield put(getStoryByStoryId(res.data.story._id));
         yield put(push('/story/' + res.data.story._id));
     } catch (error) {
         yield put(saveStoryFailed(error));
+    }
+}
+
+function* updateStorySaga(action) {
+    try {
+        yield call(() => axios.post('/api/story', action.story));
+        yield put(updateStorySucceeded());
+        yield put(showNotification('Story saved'));
+        yield put(push('/story/' + action.story._id));
+    } catch (error) {
+        yield put(updateStoryFailed(error));
     }
 }
 
@@ -64,6 +75,7 @@ function* sagas() {
         takeLatest(StoryTypes.GET_STORIES_BY_USER_ID, getStoriesByUserIdSaga),
         takeLatest(StoryTypes.GET_STORY_BY_STORY_ID, getStoryByStoryIdSaga),
         takeLatest(StoryTypes.SAVE_STORY, saveStorySaga),
+        takeLatest(StoryTypes.UPDATE_STORY, updateStorySaga),
     ])
 }
 

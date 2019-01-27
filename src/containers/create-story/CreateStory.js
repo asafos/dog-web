@@ -11,7 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Fab from '@material-ui/core/Fab';
 
-const { saveStory } = StoryCreators;
+const { saveStory, getStoryByStoryId, updateStory } = StoryCreators;
 
 const styles = {
     container: {
@@ -39,6 +39,17 @@ const styles = {
 };
 
 class CreateStory extends Component {
+
+    state = {edit: null}
+
+    componentDidMount() {
+        const {getStoryByStoryId, match} = this.props;
+        const {storyId} = match.params;
+        if(storyId) {
+            getStoryByStoryId(storyId);
+            this.setState({edit: storyId})
+        }
+    }
 
     renderField = ({ input, meta: { error, touched }, ...props }) => {
         return (<TextField
@@ -79,7 +90,11 @@ class CreateStory extends Component {
     );
 
     onSubmit = values => {
-        const { saveStory } = this.props;
+        const { saveStory, updateStory } = this.props;
+        const { edit } = this.state;
+        if(edit) {
+            updateStory(values)
+        }
         saveStory(values);
     };
 
@@ -126,13 +141,16 @@ const validate = values => {
     return errors
 };
 
-const mapStateToProps = ({ stories }) => ({ stories });
-
-const mapDispatchToProps = dispatch => bindActionCreators({ saveStory }, dispatch);
+const mapStateToProps = ({ stories }, {match}) => {
+    console.log('stories.currentStory.content', stories.currentStory.content);
+    console.log('match.params.storyId', match.params.storyId);
+    return ({ stories, initialValues: match.params.storyId ? stories.currentStory.content : undefined });
+}
+const mapDispatchToProps = dispatch => bindActionCreators({ saveStory, getStoryByStoryId, updateStory }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)
-    (withStyles(styles)
         (reduxForm({
             form: 'CreateStory',
             validate,
-        })(CreateStory)));
+            enableReinitialize: true
+        })(withStyles(styles)(CreateStory)));
