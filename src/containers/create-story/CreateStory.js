@@ -40,14 +40,14 @@ const styles = {
 
 class CreateStory extends Component {
 
-    state = {edit: null}
+    state = { edit: null }
 
     componentDidMount() {
-        const {getStoryByStoryId, match} = this.props;
-        const {storyId} = match.params;
-        if(storyId) {
+        const { getStoryByStoryId, match } = this.props;
+        const { storyId } = match.params;
+        if (storyId) {
             getStoryByStoryId(storyId);
-            this.setState({edit: storyId})
+            this.setState({ edit: storyId })
         }
     }
 
@@ -90,12 +90,12 @@ class CreateStory extends Component {
     );
 
     onSubmit = values => {
-        const { saveStory, updateStory } = this.props;
+        const { saveStory, updateStory, stories: {currentStory} } = this.props;
         const { edit } = this.state;
-        if(edit) {
-            updateStory(values)
+        if (edit) {
+            return updateStory({...currentStory, content: values})
         }
-        saveStory(values);
+        return saveStory(values);
     };
 
     render() {
@@ -141,16 +141,13 @@ const validate = values => {
     return errors
 };
 
-const mapStateToProps = ({ stories }, {match}) => {
-    console.log('stories.currentStory.content', stories.currentStory.content);
-    console.log('match.params.storyId', match.params.storyId);
-    return ({ stories, initialValues: match.params.storyId ? stories.currentStory.content : undefined });
-}
+const mapStateToProps = ({ stories }, { match }) => ({ stories, initialValues: match.params.storyId ? stories.currentStory.content : undefined });
+
 const mapDispatchToProps = dispatch => bindActionCreators({ saveStory, getStoryByStoryId, updateStory }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)
-        (reduxForm({
-            form: 'CreateStory',
-            validate,
-            enableReinitialize: true
-        })(withStyles(styles)(CreateStory)));
+    (reduxForm({
+        form: 'CreateStory',
+        validate,
+        enableReinitialize: true
+    })(withStyles(styles)(CreateStory)));

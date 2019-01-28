@@ -50,7 +50,7 @@ function* saveStorySaga(action) {
 
 function* updateStorySaga(action) {
     try {
-        yield call(() => axios.post('/api/story', action.story));
+        yield call(() => axios.put('/api/story', action.story));
         yield put(updateStorySucceeded());
         yield put(showNotification('Story saved'));
         yield put(push('/story/' + action.story._id));
