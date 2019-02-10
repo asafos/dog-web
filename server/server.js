@@ -27,8 +27,8 @@ const db = mongoose.connection;
 
 app.use(cors());
 app.use(morgan('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({limit: '10mb'}));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser(SECRET));
 app.use(session({ secret: SECRET, resave: false, saveUninitialized: true, store: new MongoStore({ mongooseConnection: db }), cookie: { httpOnly: true, maxAge: 2419200000 } }));
 app.use(passport.initialize());

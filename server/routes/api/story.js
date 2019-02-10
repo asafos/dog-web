@@ -1,22 +1,29 @@
 import mongoose from 'mongoose';
 import express from 'express';
 import { isAuthenticated } from '../../auth';
+import { uploadImage } from '../../services/aws';
+import multiparty from 'multiparty';
 
 const router = express.Router();
 const Story = mongoose.model('Story');
 
 router.post('/', isAuthenticated, async (req, res, next) => {
-    const { body, user } = req;
-
+    const { body } = req;
     if (!body) {
         return res.status(422).json({ errors: { story: 'is required' } });
     }
     if (!body.title) {
         return res.status(422).json({ errors: { title: 'is required' } });
     }
-
+    
     try {
         const createdAt = new Date();
+    
+        for (let i = 0; i < body.sections.length; i++) {
+            if (body.sections[i].image) {
+                body.sections[i].image.url = await uploadImage(body.sections[i].image)
+            }
+        }
         const story = new Story({ createdAt, content: body, ups: 0, writer: req.user._id });
         await story.save();
         res.status(200).json({ story });
@@ -43,7 +50,7 @@ router.put('/', isAuthenticated, async (req, res, next) => {
     }
 
     try {
-        const story = await Story.update({_id: body._id}, {$set: {content: body.content, updatedAt: new Date()}});
+        const story = await Story.update({ _id: body._id }, { $set: { content: body.content, updatedAt: new Date() } });
         res.status(200).json({ story });
     } catch (e) {
         res.status(500).json(e);

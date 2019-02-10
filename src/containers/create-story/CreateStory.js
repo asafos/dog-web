@@ -10,6 +10,8 @@ import StoryCreators from '../story/StoryRedux';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Fab from '@material-ui/core/Fab';
+import Dropzone from 'react-dropzone'
+import classNames from 'classnames'
 
 const { saveStory, getStoryByStoryId, updateStory } = StoryCreators;
 
@@ -64,10 +66,45 @@ class CreateStory extends Component {
         />)
     };
 
+    renderTextSection() {
+        return
+    }
+
+    renderDropZone({ input: { onChange } }) {
+        return (
+            <Dropzone onDrop={acceptedFiles => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    onChange({ ...acceptedFiles[0], base64: reader.result });
+                };
+                reader.onabort = () => console.log('file reading was aborted');
+                reader.onerror = () => console.log('file reading has failed');
+                reader.readAsDataURL(acceptedFiles[0]);
+            }}>
+                {({ getRootProps, getInputProps, isDragActive }) => {
+                    return (
+                        <div
+                            {...getRootProps()}
+                            className={classNames('dropzone', { 'dropzone--isActive': isDragActive })}
+                        >
+                            <input {...getInputProps()} />
+                            {
+                                isDragActive ?
+                                    <p>Drop files here...</p> :
+                                    <p>Try dropping some files here, or click to select files to upload.</p>
+                            }
+                        </div>
+                    )
+                }}
+            </Dropzone>
+        );
+    }
+
     renderSections = ({ fields, meta: { error, touched }, classes }) => (
         <Grid container justify="center">
             <Grid item xs={12}>
-                {fields.map((parentName, index) => (
+                {fields.map((parentName, index) => fields.get(index).image ?
+                    <Field key={index} component={this.renderDropZone} name={`${parentName}.image`} /> :
                     <div key={index} className={classes.section}>
                         <Fab onClick={() => fields.splice(index, 1)}
                             size="small"
@@ -79,21 +116,27 @@ class CreateStory extends Component {
                         <Field name={`${parentName}.body`} component={this.renderField}
                             label="Text" multiline />
                     </div>
-                ))}
+                )}
             </Grid>
             <Grid item style={{ marginTop: 16 }}>
                 <Button onClick={() => fields.push({})}>
                     Add Section
+                </Button>
+                <Button onClick={() => {
+                    fields.push({ image: {} });
+
+                }}>
+                    Add Image
                 </Button>
             </Grid>
         </Grid>
     );
 
     onSubmit = values => {
-        const { saveStory, updateStory, stories: {currentStory} } = this.props;
+        const { saveStory, updateStory, stories: { currentStory } } = this.props;
         const { edit } = this.state;
         if (edit) {
-            return updateStory({...currentStory, content: values})
+            return updateStory({ ...currentStory, content: values })
         }
         return saveStory(values);
     };
