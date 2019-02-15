@@ -25,7 +25,7 @@ class Home extends Component {
     }
 
     render() {
-        const { classes, stories: { content, fetching } } = this.props;
+        const { classes, stories: { content, fetching }, history } = this.props;
 
         if (fetching) return <div>LOADING</div>;
 
@@ -35,11 +35,11 @@ class Home extends Component {
                     <Grid container alignItems="center" direction="column">
                         <Grid item xs={12}>
                             <Typography variant="h3" className={classes.header}>
-                                Header
+                                Stories
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
-                            <StoryList stories={content} />
+                            <StoryList stories={content} onItemPress={({ _id }) => history.push('/story/' + _id)} />
                         </Grid>
                     </Grid>
                 </Grid>

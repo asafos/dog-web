@@ -13,6 +13,7 @@ const styles = {
     container: {},
     contentWrapper: {
         maxWidth: 740,
+        width: '100%',
         padding: '30px 24px',
     },
     storyTitle: {
@@ -29,7 +30,7 @@ const styles = {
     }
 };
 
-const StoryList = ({ classes, stories, editable, onDelete, onEdit, history }) => {
+const StoryList = ({ classes, stories, editable, onDelete, onEdit, onItemPress }) => {
     return (
         <Grid container justify="center" className={classes.container}>
             <Grid item xs={12} sm="auto" className={classes.contentWrapper}>
@@ -37,7 +38,7 @@ const StoryList = ({ classes, stories, editable, onDelete, onEdit, history }) =>
                     {stories.map((story, index) => {
                         const { content: { title, summary }, writer, _id } = story;
                         return (
-                            <ListItem key={index} button className={classes.storyItem} onClick={() => history.push('/story/' + _id)}>
+                            <ListItem key={index} button className={classes.storyItem} onClick={() => onItemPress(story)}>
                                 <ListItemText primary={title} secondary={summary} />
                                 {editable &&
                                     <ListItemSecondaryAction>

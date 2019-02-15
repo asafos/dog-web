@@ -78,11 +78,19 @@ class MyStories extends Component {
                     <Typography variant="h2" className={classes.subTitle} gutterBottom>
                         Public
                     </Typography>
-                    <StoryList stories={publicStories} editable onDelete={({_id}) => this.openRemoveModal(_id)} onEdit={({_id}) => history.push('/create-story/' + _id)}/>
+                    <StoryList stories={publicStories} editable
+                        onDelete={({ _id }) => this.openRemoveModal(_id)}
+                        onEdit={({ _id }) => history.push('/create-story/' + _id)}
+                        onItemPress={({ _id }) => history.push('/story/' + _id)}
+                    />
                     <Typography variant="h2" className={classes.subTitle} gutterBottom>
                         Drafts
                     </Typography>
-                    <StoryList stories={draftStories} editable onDelete={({_id}) => this.openRemoveModal(_id)} onEdit={({_id}) => history.push('/create-story/' + _id)}/>
+                    <StoryList stories={draftStories} editable
+                        onDelete={({ _id }) => this.openRemoveModal(_id)}
+                        onEdit={({ _id }) => history.push('/create-story/' + _id)}
+                        onItemPress={({ _id }) => history.push('/story/' + _id)}
+                    />
                     <Dialog open={!!openRemoveModal} onClose={this.handleClose}>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
