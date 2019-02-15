@@ -7,7 +7,9 @@ const StorySchema = new Schema({
     writer: String,
     createdAt: Date,
     updatedAt: Date,
-    ups: Number
+    ups: Number,
+    public: Boolean,
+    tags: []
 });
 
 StorySchema.methods.up = function(ups) {

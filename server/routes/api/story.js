@@ -50,7 +50,7 @@ router.put('/', isAuthenticated, async (req, res, next) => {
     }
 
     try {
-        const story = await Story.update({ _id: body._id }, { $set: { content: body.content, updatedAt: new Date() } });
+        const story = await Story.update({ _id: body._id }, { $set: { content: body.content, updatedAt: new Date(), public: body.public } });
         res.status(200).json({ story });
     } catch (e) {
         res.status(500).json(e);
@@ -101,6 +101,18 @@ router.get('/byUserId', isAuthenticated, async (req, res, next) => {
 
     try {
         const stories = await Story.find({ writer: user._id });
+        if (!stories) {
+            return res.status(404).json({ errors: { stories: 'were not found' } });
+        }
+        res.status(200).json({ stories });
+    } catch (e) {
+        res.status(500).json(e);
+    }
+});
+
+router.get('/allPublic', isAuthenticated, async (req, res, next) => {
+    try {
+        const stories = await Story.find({ public: true });
         if (!stories) {
             return res.status(404).json({ errors: { stories: 'were not found' } });
         }

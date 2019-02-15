@@ -6,12 +6,14 @@ import Button from "@material-ui/core/es/Button/Button";
 import { withStyles } from '@material-ui/core/styles';
 import { Field, reduxForm, FieldArray } from 'redux-form';
 import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
 import StoryCreators from '../story/StoryRedux';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Fab from '@material-ui/core/Fab';
 import Dropzone from 'react-dropzone'
 import classNames from 'classnames'
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const { saveStory, getStoryByStoryId, updateStory } = StoryCreators;
 
@@ -65,6 +67,13 @@ class CreateStory extends Component {
             {...props}
         />)
     };
+
+    renderCheckboxField = ({ input, label }) => (
+        <FormControlLabel
+          control={<Checkbox onChange={input.onChange} checked={input.value} />}
+          label={label}
+        />
+    )
 
     renderTextSection() {
         return
@@ -135,8 +144,10 @@ class CreateStory extends Component {
     onSubmit = values => {
         const { saveStory, updateStory, stories: { currentStory } } = this.props;
         const { edit } = this.state;
+        const p = values.public;
+        delete values.public;
         if (edit) {
-            return updateStory({ ...currentStory, content: values })
+            return updateStory({ ...currentStory, content: values, public: p })
         }
         return saveStory(values);
     };
@@ -152,6 +163,7 @@ class CreateStory extends Component {
                         <Field name="summary" component={this.renderField}
                             label="Summary" variant="outlined" multiline />
                         <FieldArray name={'sections'} component={this.renderSections} classes={classes} />
+                        <Field name="public" component={this.renderCheckboxField} label="Public" />
                     </Grid>
                     <Grid item xs={12} className={classes.container}>
                         <Grid container justify="flex-end">
@@ -184,7 +196,13 @@ const validate = values => {
     return errors
 };
 
-const mapStateToProps = ({ stories }, { match }) => ({ stories, initialValues: match.params.storyId ? stories.currentStory.content : undefined });
+const mapStateToProps = ({ stories }, { match }) => {
+    let initialValues;
+    if(match.params.storyId) {
+        initialValues = {...stories.currentStory.content, public: stories.currentStory.public }
+    }
+    return { stories, initialValues }
+}
 
 const mapDispatchToProps = dispatch => bindActionCreators({ saveStory, getStoryByStoryId, updateStory }, dispatch);
 

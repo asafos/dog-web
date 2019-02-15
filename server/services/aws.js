@@ -7,23 +7,32 @@ import multiparty from 'multiparty';
 const router = express.Router();
 
 AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'AKIAI336XSWM55IJHHYQ',
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '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',
     // region: 'us-east-1'
 });
 
 AWS.config.setPromisesDependency(bluebird);
 
 const s3 = new AWS.S3();
-const uploadFile = (buffer, name, type) => {
-    const params = {
+const uploadFile = async (buffer, name, type) => {
+    try {
+        const params = {
         ACL: 'public-read',
         Body: buffer,
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: process.env.BUCKET_NAME || 'dog-web-article-images',
         ContentType: type.mime,
         Key: `${name}.${type.ext}`
     };
+    await s3.createBucket({
+        Bucket : process.env.BUCKET_NAME || 'dog-web-article-images',
+        ACL : 'public-read'
+    }).promise()
     return s3.upload(params).promise();
+} catch (e) {
+    console.error('bucket creation failed');
+    throw e;
+}
 };
 
 export const uploadImage = async (image) => {

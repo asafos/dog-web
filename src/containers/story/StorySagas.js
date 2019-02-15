@@ -10,12 +10,14 @@ const {
     getStoryByStoryIdFailed,
     getStoriesByUserIdSucceeded,
     getStoriesByUserIdFailed,
+    getAllPublicStoriesSucceeded,
+    getAllPublicStoriesFailed,
     saveStorySucceeded,
     saveStoryFailed,
     updateStorySucceeded,
     updateStoryFailed,
     removeStorySucceeded,
-    removeStoryFailed
+    removeStoryFailed,
 } = StoryCreators;
 const { showNotification } = NotificationCreators;
 
@@ -34,6 +36,15 @@ function* getStoriesByUserIdSaga(action) {
         yield put(getStoriesByUserIdSucceeded(res.data.stories));
     } catch (error) {
         yield put(getStoriesByUserIdFailed(error));
+    }
+}
+
+function* getAllPublicStoriesSaga(action) {
+    try {
+        const res = yield call(() => axios.get('/api/story/allPublic'));
+        yield put(getAllPublicStoriesSucceeded(res.data.stories));
+    } catch (error) {
+        yield put(getAllPublicStoriesFailed(error));
     }
 }
 
@@ -74,6 +85,7 @@ function* sagas() {
         takeLatest(StoryTypes.REMOVE_STORY, removeStorySaga),
         takeLatest(StoryTypes.GET_STORIES_BY_USER_ID, getStoriesByUserIdSaga),
         takeLatest(StoryTypes.GET_STORY_BY_STORY_ID, getStoryByStoryIdSaga),
+        takeLatest(StoryTypes.GET_ALL_PUBLIC_STORIES, getAllPublicStoriesSaga),
         takeLatest(StoryTypes.SAVE_STORY, saveStorySaga),
         takeLatest(StoryTypes.UPDATE_STORY, updateStorySaga),
     ])
