@@ -18,11 +18,12 @@ router.post('/', isAuthenticated, async (req, res, next) => {
     
     try {
         const createdAt = new Date();
-    
-        for (let i = 0; i < body.sections.length; i++) {
-            if (body.sections[i].image) {
-                body.sections[i].image.url = await uploadImage(body.sections[i].image);
-                delete body.sections[i].image.base64;
+        const {sections = []} = body;    
+        for (let i = 0; i < sections.length; i++) {
+            const {image} = sections[i];
+            if (image) {
+                image.url = await uploadImage(image);
+                delete image.base64;
             }
         }
         const story = new Story({ createdAt, content: body, ups: 0, writer: req.user._id, public: body.public });
@@ -52,7 +53,7 @@ router.put('/', isAuthenticated, async (req, res, next) => {
 
     try {
         const updatedAt = new Date();
-        const {sections} = body.content;
+        const {sections = []} = body.content;
         for (let i = 0; i < sections.length; i++) {
             const {image} = sections[i];
             if (image && image.base64) {

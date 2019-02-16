@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
+import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import Grid from "@material-ui/core/es/Grid/Grid";
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import StoryCreators from './StoryRedux';
 
-const {getStoryByStoryId} = StoryCreators;
+const { getStoryByStoryId } = StoryCreators;
 
 const styles = {
     container: {},
@@ -51,50 +51,67 @@ const styles = {
     },
     topContainer: {
         marginBottom: '4em'
+    },
+    image: {
+        maxWidth: '100%',
+        maxHeight: '200px',
+    },
+    imageContainer: {
+        textAlign: 'center'
     }
 };
 
 class Story extends Component {
 
     componentDidMount() {
-        const {getStoryByStoryId, match} = this.props;
+        const { getStoryByStoryId, match } = this.props;
         getStoryByStoryId(match.params.storyId);
     }
 
+    renderSection = ({ title, body, image }, index) => {
+        const { classes } = this.props;
+        if (image) {
+            return (
+                <div className={classes.imageContainer}>
+                    <img src={image.url || image.base64} className={classes.image} />
+                </div>
+            )
+        }
+        return (<div key={index} className={classes.section}>
+            <Typography variant="subtitle1" className={classes.sectionTitle} gutterBottom>
+                {title}
+            </Typography>
+            <Typography variant="body1" className={classes.p} gutterBottom>
+                {body}
+            </Typography>
+        </div>)
+    }
+
     render() {
-        const {classes, stories: {fetching, currentStory: {content: {title, summary, sections = []}}}} = this.props;
+        const { classes, stories: { fetching, currentStory: { content: { title, summary, sections = [] } } } } = this.props;
 
         if (fetching) return null;
 
         return (
             <Grid container justify="center" className={classes.container}>
                 <Grid item xs={12} sm="auto" className={classes.contentWrapper}>
-                <div className={classes.topContainer}>
-                    <Typography variant="h1" className={classes.storyTitle} gutterBottom>
-                        {title}
-                    </Typography>
-                    <Typography variant="p" className={classes.storySummary} gutterBottom>
-                        {summary}
-                    </Typography>
-                </div>
-                    {sections.map(({title, body}, index) => (
-                        <div key={index} className={classes.section}>
-                            <Typography variant="subtitle1" className={classes.sectionTitle} gutterBottom>
-                                {title}
-                            </Typography>
-                            <Typography variant="body1" className={classes.p} gutterBottom>
-                                {body}
-                            </Typography>
-                        </div>
-                    ))}
+                    <div className={classes.topContainer}>
+                        <Typography variant="h1" className={classes.storyTitle} gutterBottom>
+                            {title}
+                        </Typography>
+                        <Typography variant="p" className={classes.storySummary} gutterBottom>
+                            {summary}
+                        </Typography>
+                    </div>
+                    {sections.map(this.renderSection)}
                 </Grid>
             </Grid>
         );
     }
 }
 
-const mapStateToProps = ({stories}) => ({stories});
+const mapStateToProps = ({ stories }) => ({ stories });
 
-const mapDispatchToProps = dispatch => bindActionCreators({getStoryByStoryId}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getStoryByStoryId }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Story));
