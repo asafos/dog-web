@@ -7,15 +7,18 @@ import multiparty from 'multiparty';
 const router = express.Router();
 
 AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'AKIAI336XSWM55IJHHYQ',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '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',
-    // region: 'us-east-1'
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'AKIAJB23JHUTQW2S72HA',
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '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',
+    region: 'eu-central-1'
 });
 
 AWS.config.setPromisesDependency(bluebird);
 
 const s3 = new AWS.S3();
 const uploadFile = async (buffer, name, type) => {
+    const nameSplit = name.split('.');
+    nameSplit.pop();
+    name = nameSplit.join('.');
     try {
         const params = {
         ACL: 'public-read',
@@ -24,10 +27,11 @@ const uploadFile = async (buffer, name, type) => {
         ContentType: type.mime,
         Key: `${name}.${type.ext}`
     };
-    await s3.createBucket({
-        Bucket : process.env.BUCKET_NAME || 'dog-web-article-images',
-        ACL : 'public-read'
-    }).promise()
+    // await s3.getBucketPolicy(console.log, {Bucket: process.env.BUCKET_NAME || 'dog-web-article-images',});
+    // await s3.createBucket({
+    //     Bucket : process.env.BUCKET_NAME || 'dog-web-article-images',
+    //     ACL : 'public-read'
+    // }).promise()
     return s3.upload(params).promise();
 } catch (e) {
     console.error('bucket creation failed');

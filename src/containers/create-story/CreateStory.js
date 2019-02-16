@@ -84,7 +84,7 @@ class CreateStory extends Component {
             <Dropzone onDrop={acceptedFiles => {
                 const reader = new FileReader();
                 reader.onload = () => {
-                    onChange({ ...acceptedFiles[0], base64: reader.result });
+                    onChange({ name: acceptedFiles[0].name, base64: reader.result });
                 };
                 reader.onabort = () => console.log('file reading was aborted');
                 reader.onerror = () => console.log('file reading has failed');

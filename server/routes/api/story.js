@@ -21,10 +21,11 @@ router.post('/', isAuthenticated, async (req, res, next) => {
     
         for (let i = 0; i < body.sections.length; i++) {
             if (body.sections[i].image) {
-                body.sections[i].image.url = await uploadImage(body.sections[i].image)
+                body.sections[i].image.url = await uploadImage(body.sections[i].image);
+                delete body.sections[i].image.base64;
             }
         }
-        const story = new Story({ createdAt, content: body, ups: 0, writer: req.user._id });
+        const story = new Story({ createdAt, content: body, ups: 0, writer: req.user._id, public: body.public });
         await story.save();
         res.status(200).json({ story });
     } catch (e) {
@@ -50,7 +51,16 @@ router.put('/', isAuthenticated, async (req, res, next) => {
     }
 
     try {
-        const story = await Story.update({ _id: body._id }, { $set: { content: body.content, updatedAt: new Date(), public: body.public } });
+        const updatedAt = new Date();
+        const {sections} = body.content;
+        for (let i = 0; i < sections.length; i++) {
+            const {image} = sections[i];
+            if (image && image.base64) {
+                image.url = await uploadImage(image);
+                delete image.base64;
+            }
+        }
+        const story = await Story.update({ _id: body._id }, { $set: { content: body.content, updatedAt, public: body.public } });
         res.status(200).json({ story });
     } catch (e) {
         res.status(500).json(e);
