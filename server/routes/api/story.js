@@ -15,12 +15,12 @@ router.post('/', isAuthenticated, async (req, res, next) => {
     if (!body.title) {
         return res.status(422).json({ errors: { title: 'is required' } });
     }
-    
+
     try {
         const createdAt = new Date();
-        const {sections = []} = body;    
+        const { sections = [] } = body;
         for (let i = 0; i < sections.length; i++) {
-            const {image} = sections[i];
+            const { image } = sections[i];
             if (image) {
                 image.url = await uploadImage(image);
                 delete image.base64;
@@ -53,9 +53,13 @@ router.put('/', isAuthenticated, async (req, res, next) => {
 
     try {
         const updatedAt = new Date();
-        const {sections = []} = body.content;
+        const { sections = [], mainImage } = body.content;
+        if (mainImage) {
+            mainImage.url = await uploadImage(mainImage);
+            delete mainImage.base64;
+        }
         for (let i = 0; i < sections.length; i++) {
-            const {image} = sections[i];
+            const { image } = sections[i];
             if (image && image.base64) {
                 image.url = await uploadImage(image);
                 delete image.base64;

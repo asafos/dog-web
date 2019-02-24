@@ -8,7 +8,6 @@ import { Field, reduxForm, FieldArray } from 'redux-form';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import StoryCreators from '../story/StoryRedux';
-import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Fab from '@material-ui/core/Fab';
 import Dropzone from 'react-dropzone'
@@ -39,6 +38,15 @@ const styles = {
         '&:hover': {
             backgroundColor: '#fb766c',
         }
+    },
+    image: {
+        maxWidth: '100%',
+        maxHeight: '200px',
+    },
+    imageCOntainer: {
+        textAlign: 'center',
+        paddingTop: 16,
+        cursor: 'pointer'
     }
 };
 
@@ -70,8 +78,8 @@ class CreateStory extends Component {
 
     renderCheckboxField = ({ input, label }) => (
         <FormControlLabel
-          control={<Checkbox onChange={input.onChange} checked={input.value} />}
-          label={label}
+            control={<Checkbox onChange={input.onChange} checked={input.value} />}
+            label={label}
         />
     )
 
@@ -79,7 +87,8 @@ class CreateStory extends Component {
         return
     }
 
-    renderDropZone({ input: { onChange } }) {
+    renderDropZone = ({ input: { onChange, value } }) => {
+        const { classes } = this.props;
         return (
             <Dropzone onDrop={acceptedFiles => {
                 const reader = new FileReader();
@@ -94,10 +103,11 @@ class CreateStory extends Component {
                     return (
                         <div
                             {...getRootProps()}
-                            className={classNames('dropzone', { 'dropzone--isActive': isDragActive })}
+                            className={classNames(classes.section, classes.imageCOntainer)}
                         >
                             <input {...getInputProps()} />
-                            {
+                            {value.base64 ?
+                                <img src={value.base64} className={classes.image} /> :
                                 isDragActive ?
                                     <p>Drop files here...</p> :
                                     <p>Try dropping some files here, or click to select files to upload.</p>
@@ -107,13 +117,20 @@ class CreateStory extends Component {
                 }}
             </Dropzone>
         );
-    }
+    };
 
     renderSections = ({ fields, meta: { error, touched }, classes }) => (
         <Grid container justify="center">
             <Grid item xs={12}>
                 {fields.map((parentName, index) => fields.get(index).image ?
-                    <Field key={index} component={this.renderDropZone} name={`${parentName}.image`} /> :
+                    <div style={{ position: 'relative' }}>
+                        <Field key={index} component={this.renderDropZone} name={`${parentName}.image`} />
+                        <Fab onClick={() => fields.splice(index, 1)}
+                            size="small"
+                            className={classes.removeSection}>
+                            <DeleteIcon />
+                        </Fab>
+                    </div> :
                     <div key={index} className={classes.section}>
                         <Fab onClick={() => fields.splice(index, 1)}
                             size="small"
@@ -131,10 +148,7 @@ class CreateStory extends Component {
                 <Button onClick={() => fields.push({})}>
                     Add Section
                 </Button>
-                <Button onClick={() => {
-                    fields.push({ image: {} });
-
-                }}>
+                <Button onClick={() => fields.push({ image: {} })}>
                     Add Image
                 </Button>
             </Grid>
@@ -158,6 +172,7 @@ class CreateStory extends Component {
             <form onSubmit={handleSubmit(this.onSubmit)}>
                 <Grid container justify="center">
                     <Grid item xs={12} sm="auto" className={classes.container}>
+                        <Field component={this.renderDropZone} name={`mainImage`} />
                         <Field name="title" component={this.renderField}
                             label="Title" variant="outlined" />
                         <Field name="summary" component={this.renderField}
@@ -198,8 +213,8 @@ const validate = values => {
 
 const mapStateToProps = ({ stories }, { match }) => {
     let initialValues;
-    if(match.params.storyId) {
-        initialValues = {...stories.currentStory.content, public: stories.currentStory.public }
+    if (match.params.storyId) {
+        initialValues = { ...stories.currentStory.content, public: stories.currentStory.public }
     }
     return { stories, initialValues }
 }

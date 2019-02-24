@@ -58,6 +58,9 @@ const styles = {
     },
     imageContainer: {
         textAlign: 'center'
+    },
+    mainImage: {
+        maxWidth: '100%'
     }
 };
 
@@ -88,13 +91,18 @@ class Story extends Component {
     }
 
     render() {
-        const { classes, stories: { fetching, currentStory: { content: { title, summary, sections = [] } } } } = this.props;
+        const { classes, stories: { fetching, currentStory: { content: { mainImage, title, summary, sections = [] } } } } = this.props;
 
         if (fetching) return null;
 
         return (
             <Grid container justify="center" className={classes.container}>
                 <Grid item xs={12} sm="auto" className={classes.contentWrapper}>
+                {mainImage && 
+                <div className={classes.imageContainer}>
+                    <img src={mainImage.url} className={classes.mainImage}/>
+                    </div>
+                }
                     <div className={classes.topContainer}>
                         <Typography variant="h1" className={classes.storyTitle} gutterBottom>
                             {title}
