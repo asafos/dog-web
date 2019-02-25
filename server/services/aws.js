@@ -7,8 +7,8 @@ import multiparty from 'multiparty';
 const router = express.Router();
 
 AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'AKIAJB23JHUTQW2S72HA',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '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',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
     region: 'eu-central-1'
 });
 
