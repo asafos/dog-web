@@ -6,6 +6,7 @@ import {withStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import PawIcon from '@material-ui/icons/Pets';
+import axios from 'axios';
 import {Link} from "react-router-dom";
 
 const styles = {
@@ -23,10 +24,7 @@ const styles = {
   },
   linkContainer: {
     display: 'flex',
-    justifyContent: 'space-between',
-    flexDirection: 'column',
-    marginTop: 8,
-    marginBottom: 8
+    alignItems: 'center'
   },
   link: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -41,7 +39,12 @@ const styles = {
   }
 };
 
-class LocalLoginForm extends Component {
+class ForgotPasswordForm extends Component {
+
+  state = {
+    loading: false,
+    error: ''
+  };
 
   componentDidMount() {
     const {initialize, location} = this.props;
@@ -72,34 +75,34 @@ class LocalLoginForm extends Component {
     )
   };
 
-  onSubmit = ({email, password}) => {
-    const {login} = this.props;
-    login(email, password)
+  onSubmit = ({email}) => {
+    return axios.post('/api/auth/forgot-password', {email})
+      .then(() => {
+        this.setState({emailSent: true});
+      })
+      .catch(err => {
+        this.setState({error: JSON.stringify(err)});
+      })
   };
 
   render() {
-    const {classes, handleSubmit} = this.props;
+    const {classes, handleSubmit, submitting} = this.props;
     return (
       <form onSubmit={handleSubmit(this.onSubmit)}>
         <Grid container className={classes.formWrapper} justify="space-between">
           <Grid item xs={12}>
             <Field name="email" label="Email" type="email"
-                   component={this.renderTextField} autoComplete="email" autoCapitalize="false"/>
-            <Field name="password" label="Password" type="password"
-                   component={this.renderTextField}/>
+                   component={this.renderTextField} autoComplete="email" autoCapitalize="false" />
           </Grid>
           <Grid item className={classes.linkContainer}>
-            <Link to="/auth/signup" className={classes.link} variant="flat">
-              Signup
-            </Link>
-            <Link to="/auth/forgot-password" className={classes.link} variant="flat">
-              Forgot password?
+            <Link to="/auth/login" className={classes.link} variant="flat">
+              Return to login page
             </Link>
           </Grid>
           <Grid item>
             <Button variant="contained" color="primary" size="large"
-                    type="submit" className={classes.button}>
-              Login
+                    type="submit" className={classes.button} disabled={submitting}>
+              Send Email
             </Button>
           </Grid>
         </Grid>
@@ -110,9 +113,6 @@ class LocalLoginForm extends Component {
 
 const validate = values => {
   const errors = {};
-  if (!values.password) {
-    errors.password = 'Required'
-  }
   if (!values.email) {
     errors.email = 'Required'
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -124,5 +124,5 @@ const validate = values => {
 
 export default reduxForm({
   validate,
-  form: 'LocalLoginForm'
-})(withStyles(styles)(LocalLoginForm))
+  form: 'ForgotPasswordForm'
+})(withStyles(styles)(ForgotPasswordForm))

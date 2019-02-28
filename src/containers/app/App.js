@@ -39,7 +39,7 @@ class App extends Component {
 
     render() {
         const { classes, history, auth: {user = {}, fetching}, logout } = this.props;
-        if (fetching) {
+        if (fetching || !user) {
             return null
         }
         return (
