@@ -8,6 +8,10 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { withStyles } from '@material-ui/core/es';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
 
 const styles = {
     container: {},
@@ -34,7 +38,7 @@ const StoryList = ({ classes, stories, editable, onDelete, onEdit, onItemPress }
     return (
         <Grid container justify="center" className={classes.container}>
             <Grid item xs={12} sm="auto" className={classes.contentWrapper}>
-                <List dense className={classes.root}>
+                {/* <List dense className={classes.root}>
                     {stories.map((story, index) => {
                         const { content: { title, summary }, writer, _id } = story;
                         return (
@@ -52,7 +56,24 @@ const StoryList = ({ classes, stories, editable, onDelete, onEdit, onItemPress }
                             </ListItem>
                         )
                     })}
-                </List>
+                </List> */}
+                {stories.map((story, index) => (
+                    <Card className={classes.card}>
+                        <CardMedia
+                            className={classes.cover}
+                            image="/static/images/cards/live-from-space.jpg"
+                            title="Live from space album cover"
+                        />
+                        <CardContent className={classes.content}>
+                            <Typography component="h5" variant="h5">
+                                Live From Space
+                            </Typography>
+                            <Typography variant="subtitle1" color="textSecondary">
+                                Mac Miller
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                ))}
             </Grid>
         </Grid>
     );

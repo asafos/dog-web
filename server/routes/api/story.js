@@ -18,7 +18,11 @@ router.post('/', isAuthenticated, async (req, res, next) => {
 
     try {
         const createdAt = new Date();
-        const { sections = [] } = body;
+        const { sections = [], mainImage } = body;
+        if (mainImage) {
+            mainImage.url = await uploadImage(mainImage);
+            delete mainImage.base64;
+        }
         for (let i = 0; i < sections.length; i++) {
             const { image } = sections[i];
             if (image) {

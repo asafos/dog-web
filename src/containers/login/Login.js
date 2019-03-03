@@ -12,6 +12,7 @@ import { SITE_NAME } from '../../constants/appData';
 import Typography from '@material-ui/core/Typography';
 import Hidden from '@material-ui/core/Hidden';
 import ForgotPasswordForm from "./components/ForgotPasswordForm";
+import RestorePasswordForm from "./components/RestorePasswordForm";
 
 const { googleLogin, signup, login } = LoginCreators;
 
@@ -46,7 +47,7 @@ class Login extends Component {
     }
 
     renderContent = () => {
-        const { login, signup } = this.props;
+        const { login, signup, history } = this.props;
         return (
             <Grid container>
                 <Grid item style={{ width: '100%' }}>
@@ -54,6 +55,7 @@ class Login extends Component {
                         <Route path="/auth/login" component={props => <LocalLoginForm {...props} login={login} />} />
                         <Route path="/auth/signup" component={props => <SignupForm {...props} signup={signup} />} />
                         <Route path="/auth/forgot-password" component={props => <ForgotPasswordForm {...props} signup={signup} />} />
+                        <Route path="/auth/restore-password" component={props => <RestorePasswordForm {...props} history={history}/>} />
                     </Switch>
                 </Grid>
             </Grid>

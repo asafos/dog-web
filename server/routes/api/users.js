@@ -107,9 +107,73 @@ router.post('/email-verification', (req, res, next) => {
     });
 });
 
+router.post('/reset-password', async (req, res, next) => {
+    const { body: { email, password, token } } = req;
+
+    if (!email) {
+        return res.status(422).json({ errors: { email: 'is required' } });
+    }
+
+    if (!password) {
+        return res.status(422).json({ errors: { password: 'is required' } });
+    }
+
+    if (!token) {
+        return res.status(422).json({ errors: { token: 'is required' } });
+    }
+
+    try {
+        const user = await Users.findOne({
+            where: {
+                restorePasswordToken: token,
+                restorePasswordTTL: {
+                    $gt: Date.now()
+                }
+            }
+        })
+        if (!user) {
+            return res.status(400).json({ errors: { link: 'is invalid or have expired' } });
+        }
+        return res.status(200).send()
+    } catch (e) {
+        res.status(500).json(e)
+    }
+});
+
+router.post('/forgot-password', async (req, res, next) => {
+    const { body: { email } } = req;
+
+    if (!email) {
+        return res.status(422).json({ errors: { email: 'is required' } });
+    }
+
+    try {
+        const user = await Users.findOne({ email })
+        if (!user) {
+            return res.status(400).json({ errors: { user: 'does not exists' } });
+        }
+        // TODO: check token and TTL
+    } catch (e) {
+        res.status(500).json(e)
+    }
+});
+
 //GET current route (required, only authenticated users have access)
 router.get('/current', isAuthenticated, (req, res, next) => {
     const { user: { _id } } = req;
+
+    return Users.findById(_id)
+        .then((user) => {
+            if (!user) {
+                return res.sendStatus(400);
+            }
+
+            return res.json({ user: user.toAuthJSON() });
+        });
+});
+
+router.get('/validate-reset-password-token', isAuthenticated, (req, res, next) => {
+    const { params: {} } = req;
 
     return Users.findById(_id)
         .then((user) => {
