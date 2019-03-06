@@ -10,13 +10,14 @@ const UsersSchema = new Schema({
   salt: String,
   stories: Array,
   favorites: Array,
-  restorePasswordToken: String,
-  restorePasswordTTL: Date
+  resetPasswordToken: String,
+  resetPasswordTTL: Number
 });
 
 UsersSchema.methods.setPassword = function (password) {
   this.salt = crypto.randomBytes(16).toString('hex');
   this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
+  return {hash: this.hash, salt: this.salt};
 };
 
 UsersSchema.methods.validatePassword = function (password) {

@@ -76,7 +76,7 @@ class ForgotPasswordForm extends Component {
   };
 
   onSubmit = ({email}) => {
-    return axios.post('/api/auth/forgot-password', {email})
+    return axios.post('/api/users/forgot-password', {email})
       .then(() => {
         this.setState({emailSent: true});
       })

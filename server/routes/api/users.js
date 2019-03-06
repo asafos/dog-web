@@ -1,11 +1,23 @@
 import mongoose from 'mongoose';
 import passport from 'passport';
+import nodemailer from 'nodemailer';
 import express from 'express';
 import { isAuthenticated } from '../../auth';
 import nev from '../../services/email-verification';
+import config from 'config';
+
+const resetPassConfig = config.get('auth').resetPassword;
 
 const router = express.Router();
 const Users = mongoose.model('Users');
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: resetPassConfig.user,
+        pass: resetPassConfig.pass
+    }
+})
 
 //POST new user route (optional, everyone has access)
 router.post('/signup', (req, res, next) => {
@@ -124,16 +136,21 @@ router.post('/reset-password', async (req, res, next) => {
 
     try {
         const user = await Users.findOne({
-            where: {
-                restorePasswordToken: token,
-                restorePasswordTTL: {
-                    $gt: Date.now()
-                }
+            email,
+            resetPasswordToken: token,
+            resetPasswordTTL: {
+                $gt: Date.now()
             }
         })
         if (!user) {
             return res.status(400).json({ errors: { link: 'is invalid or have expired' } });
         }
+        const passObj = user.setPassword(password)
+        await user.update({
+            ...passObj,
+            resetPasswordToken: null,
+            resetPasswordTTL: null
+        })
         return res.status(200).send()
     } catch (e) {
         res.status(500).json(e)
@@ -152,7 +169,18 @@ router.post('/forgot-password', async (req, res, next) => {
         if (!user) {
             return res.status(400).json({ errors: { user: 'does not exists' } });
         }
-        // TODO: check token and TTL
+        const token = Math.random().toString(36).slice(2);
+        await Users.update({ _id: user._id }, { $set: { resetPasswordToken: token, resetPasswordTTL: Date.now() + 60 * 60 * 1000 } });
+
+        const mailOptions = {
+            from: 'asaftest68@gmail.com',
+            to: `${email}`,
+            subject: 'Reset Password',
+            text: `${resetPassConfig.url}?email=${email}&token=${token}`
+        };
+
+        await transporter.sendMail(mailOptions)
+        res.status(200).send();
     } catch (e) {
         res.status(500).json(e)
     }
@@ -172,17 +200,33 @@ router.get('/current', isAuthenticated, (req, res, next) => {
         });
 });
 
-router.get('/validate-reset-password-token', isAuthenticated, (req, res, next) => {
-    const { params: {} } = req;
+router.post('/validate-reset-password-token', isAuthenticated, async (req, res, next) => {
+    const { body: { token, email } } = req;
 
-    return Users.findById(_id)
-        .then((user) => {
-            if (!user) {
-                return res.sendStatus(400);
+    if (!email) {
+        return res.status(422).json({ errors: { email: 'is required' } });
+    }
+
+    if (!token) {
+        return res.status(422).json({ errors: { token: 'is required' } });
+    }
+
+    try {
+        const user = await Users.findOne({
+            email,
+            resetPasswordToken: token,
+            resetPasswordTTL: {
+                $gt: Date.now()
             }
+        })
+        if (!user) {
+            return res.status(400).json({ errors: { link: 'is invalid or have expired' } });
+        }
 
-            return res.json({ user: user.toAuthJSON() });
-        });
+        return res.json({ user: user.toAuthJSON() });
+    } catch (e) {
+        res.status(500).json(e)
+    }
 });
 
 export default router;

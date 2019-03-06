@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import PawIcon from '@material-ui/icons/Pets';
 import { Link } from "react-router-dom";
-import Axios from 'axios';
+import axios from 'axios';
 
 const styles = {
     formWrapper: {
@@ -48,8 +48,14 @@ class RestorePasswordForm extends Component {
     }
 
     componentDidMount() {
-        axios.get('auth/validate-reset-password-token').then(() => {
-            this.setState({ fetching: false });
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email');
+        const token = urlParams.get('token');
+        if (!email || !token) {
+            return this.setState({ fetching: false, error: true });
+        }
+        axios.post('/api/users/validate-reset-password-token', { token, email }).then(() => {
+            this.setState({ fetching: false, email, token });
         }).catch(e => {
             this.setState({ fetching: false, error: true });
         })
@@ -77,8 +83,13 @@ class RestorePasswordForm extends Component {
         )
     };
 
-    onSubmit = ({ email, password }) => {
-        return axios.post('/api/users/reset-password', { email, password, token }).then(() => { })
+    onSubmit = ({ password }) => {
+        const { email, token } = this.state;
+        const { history } = this.props;
+        return axios.post('/api/users/reset-password', { email, password, token })
+        .then(() => {
+            history.replace('/auth/login')
+         })
     };
 
     render() {
@@ -92,6 +103,9 @@ class RestorePasswordForm extends Component {
                 <Grid container className={classes.formWrapper} justify="space-between">
                     <Grid item xs={12}>
                         Link is invalid or have expired
+                        <Link to="/auth/login" className={classes.link} variant="flat">
+                            Go to login page
+                        </Link>
                     </Grid>
                 </Grid>
             )

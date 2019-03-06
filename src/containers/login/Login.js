@@ -12,7 +12,7 @@ import { SITE_NAME } from '../../constants/appData';
 import Typography from '@material-ui/core/Typography';
 import Hidden from '@material-ui/core/Hidden';
 import ForgotPasswordForm from "./components/ForgotPasswordForm";
-import RestorePasswordForm from "./components/RestorePasswordForm";
+import ResetPasswordForm from "./components/ResetPasswordForm";
 
 const { googleLogin, signup, login } = LoginCreators;
 
@@ -55,7 +55,7 @@ class Login extends Component {
                         <Route path="/auth/login" component={props => <LocalLoginForm {...props} login={login} />} />
                         <Route path="/auth/signup" component={props => <SignupForm {...props} signup={signup} />} />
                         <Route path="/auth/forgot-password" component={props => <ForgotPasswordForm {...props} signup={signup} />} />
-                        <Route path="/auth/restore-password" component={props => <RestorePasswordForm {...props} history={history}/>} />
+                        <Route path="/auth/reset-password" component={props => <ResetPasswordForm {...props} history={history}/>} />
                     </Switch>
                 </Grid>
             </Grid>
