@@ -85,10 +85,10 @@ router.post('/login', (req, res, next) => {
         }
 
         if (passportUser) {
-            return req.login(passportUser, (err) => res.json(passportUser))
+            return req.login(passportUser, (err) => res.json(passportUser));
         }
 
-        return res.status(400).send('User not found');
+        return res.status(400).send('Please check your credentials');
     })(req, res, next);
 });
 

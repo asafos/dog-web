@@ -68,7 +68,7 @@ class SignupForm extends Component {
     };
 
     render() {
-        const { classes, handleSubmit } = this.props;
+        const { classes, handleSubmit, fetching } = this.props;
         return (
             <form onSubmit={handleSubmit(this.onSubmit)}>
                 <Grid container className={classes.formWrapper} justify="space-between">
@@ -87,7 +87,7 @@ class SignupForm extends Component {
                     </Grid>
                     <Grid item>
                         <Button variant="contained" color="primary" size="large"
-                            type="submit" className={classes.button}>
+                            type="submit" className={classes.button} disabled={fetching}>
                             Signup
                     </Button>
                     </Grid>

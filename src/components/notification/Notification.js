@@ -22,7 +22,17 @@ const styles = theme => ({
 class Notification extends Component {
 
     render() {
-        const { notification: { open, message, variant }, hideNotification, classes } = this.props;
+        const { notification: { error, open, message, variant }, hideNotification, classes } = this.props;
+        let errorText = '';
+        if(error) {
+            if(typeof error === 'string') {
+                errorText = error;
+            } else if(typeof error === 'object' && error.errors) {
+                errorText = Object.keys(error.errors).reduce((acc, item) => {
+                    return acc += item + ' ' + error.errors[item]
+                }, '')
+            }
+        }
         return (
             <Snackbar
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
@@ -44,7 +54,7 @@ class Notification extends Component {
                       <CloseIcon />
                     </IconButton>,
                   ]}
-                message={<span id="message-id">{message}</span>} />
+                message={<span id="message-id">{message + ' ' + errorText}</span>} />
         );
     }
 }

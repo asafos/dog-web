@@ -20,7 +20,7 @@ export const INITIAL_STATE = {
 
 /* ------------- Reducers ------------- */
 
-const showNotification = (state, {message, error}) => ({...state, open: true, message, variant: error ? 'error' : 'success'});
+const showNotification = (state, {message, error}) => ({...state, open: true, message, variant: error ? 'error' : 'success', error});
 const hideNotification = (state, {}) => INITIAL_STATE;
 
 /* ------------- Hookup Reducers To Types ------------- */

@@ -76,11 +76,14 @@ class ForgotPasswordForm extends Component {
   };
 
   onSubmit = ({email}) => {
+    const {showNotification} = this.props;
     return axios.post('/api/users/forgot-password', {email})
       .then(() => {
+        showNotification('Email was sent');
         this.setState({emailSent: true});
       })
       .catch(err => {
+        showNotification('Email was not sent.', err.response.data);
         this.setState({error: JSON.stringify(err)});
       })
   };

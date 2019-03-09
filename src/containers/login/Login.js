@@ -13,8 +13,11 @@ import Typography from '@material-ui/core/Typography';
 import Hidden from '@material-ui/core/Hidden';
 import ForgotPasswordForm from "./components/ForgotPasswordForm";
 import ResetPasswordForm from "./components/ResetPasswordForm";
+import NotificationCreators from '../../components/notification/NotificationRedux';
+import Notification from '../../components/notification/Notification';
 
-const { googleLogin, signup, login } = LoginCreators;
+const { showNotification } = NotificationCreators;
+const { googleLogin, signup, login, getUser } = LoginCreators;
 
 const styles = {
     container: {
@@ -47,15 +50,15 @@ class Login extends Component {
     }
 
     renderContent = () => {
-        const { login, signup, history } = this.props;
+        const { login, signup, history, showNotification, auth: {fetching} } = this.props;
         return (
             <Grid container>
                 <Grid item style={{ width: '100%' }}>
                     <Switch>
-                        <Route path="/auth/login" component={props => <LocalLoginForm {...props} login={login} />} />
-                        <Route path="/auth/signup" component={props => <SignupForm {...props} signup={signup} />} />
-                        <Route path="/auth/forgot-password" component={props => <ForgotPasswordForm {...props} signup={signup} />} />
-                        <Route path="/auth/reset-password" component={props => <ResetPasswordForm {...props} history={history}/>} />
+                        <Route path="/auth/login" component={props => <LocalLoginForm {...props} login={login} fetching={fetching} />} />
+                        <Route path="/auth/signup" component={props => <SignupForm {...props} signup={signup} fetching={fetching} />} />
+                        <Route path="/auth/forgot-password" component={props => <ForgotPasswordForm {...props} signup={signup} showNotification={showNotification} />} />
+                        <Route path="/auth/reset-password" component={props => <ResetPasswordForm {...props} history={history} showNotification={showNotification} />} />
                     </Switch>
                 </Grid>
             </Grid>
@@ -81,6 +84,7 @@ class Login extends Component {
                 <Hidden smUp>
                     {this.renderContent()}
                 </Hidden>
+                <Notification/>
             </Grid>
         );
     }
@@ -88,6 +92,6 @@ class Login extends Component {
 
 const mapStateToProps = ({ auth }) => ({ auth });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ googleLogin, signup, login }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ googleLogin, signup, login, showNotification, getUser }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Login));

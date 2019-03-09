@@ -85,15 +85,18 @@ class RestorePasswordForm extends Component {
 
     onSubmit = ({ password }) => {
         const { email, token } = this.state;
-        const { history } = this.props;
+        const { history, showNotification } = this.props;
         return axios.post('/api/users/reset-password', { email, password, token })
         .then(() => {
-            history.replace('/auth/login')
+            history.replace('/auth/login');
+            showNotification('Reset password succeeded');
+         }).catch(err =>{
+            showNotification('Reset password failed. ', err.response.data);
          })
     };
 
     render() {
-        const { classes, handleSubmit } = this.props;
+        const { classes, handleSubmit, submitting } = this.props;
         const { fetching, error } = this.state;
 
         if (fetching) return null;
@@ -127,7 +130,7 @@ class RestorePasswordForm extends Component {
                     </Grid>
                     <Grid item>
                         <Button variant="contained" color="primary" size="large"
-                            type="submit" className={classes.button}>
+                            type="submit" className={classes.button} disabled={submitting}>
                             Restore Password
                     </Button>
                     </Grid>
