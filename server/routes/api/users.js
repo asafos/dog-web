@@ -7,15 +7,16 @@ import nev from '../../services/email-verification';
 import config from 'config';
 
 const resetPassConfig = config.get('auth').resetPassword;
-
+const systemEmailUser = config.util.getEnv('SYSTEM_EMAIL_USER');
+const systemEmailPassword = config.util.getEnv('SYSTEM_EMAIL_PASSWORD');
 const router = express.Router();
 const Users = mongoose.model('Users');
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: resetPassConfig.user,
-        pass: resetPassConfig.pass
+        user: systemEmailUser,
+        pass: systemEmailPassword
     }
 })
 

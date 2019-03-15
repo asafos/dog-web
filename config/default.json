@@ -9,15 +9,11 @@
             "callback":"http://localhost:4000/auth/facebook/callback"
         },
         "resetPassword": {
-            "user": "asaftest68@gmail.com",
-            "pass": "Test1234",
             "url": "http://localhost:4000/auth/reset-password"
         },
         "emailVerification": {
             "verificationURL": "http://localhost:4000/auth/email-verification/${URL}",
             "service": "Gmail",
-            "user": "asaftest68@gmail.com",
-            "pass": "Test1234",
             "tempUserCollection": "dogweb_tempusers"
         }
     }

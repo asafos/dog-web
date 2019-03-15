@@ -1,14 +1,12 @@
 import express from "express";
 import AWS from 'aws-sdk';
-import fs from 'fs';
 import fileType from 'file-type';
 import bluebird from 'bluebird'
-import multiparty from 'multiparty';
 const router = express.Router();
 
 AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     region: 'eu-central-1'
 });
 
@@ -23,15 +21,10 @@ const uploadFile = async (buffer, name, type) => {
         const params = {
         ACL: 'public-read',
         Body: buffer,
-        Bucket: process.env.BUCKET_NAME || 'dog-web-article-images',
+        Bucket: process.env.BUCKET_NAME,
         ContentType: type.mime,
         Key: `${name}.${type.ext}`
     };
-    // await s3.getBucketPolicy(console.log, {Bucket: process.env.BUCKET_NAME || 'dog-web-article-images',});
-    // await s3.createBucket({
-    //     Bucket : process.env.BUCKET_NAME || 'dog-web-article-images',
-    //     ACL : 'public-read'
-    // }).promise()
     return s3.upload(params).promise();
 } catch (e) {
     console.error('bucket creation failed');
