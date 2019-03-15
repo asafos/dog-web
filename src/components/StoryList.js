@@ -1,19 +1,17 @@
 import React from 'react';
 import Grid from "@material-ui/core/es/Grid/Grid";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { withStyles } from '@material-ui/core/es';
+import { withStyles, CardActions } from '@material-ui/core/es';
 import Card from '@material-ui/core/Card';
+import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
 
-const styles = {
+const styles = theme => ({
     container: {},
     contentWrapper: {
         maxWidth: 740,
@@ -21,62 +19,92 @@ const styles = {
         padding: '30px 24px',
     },
     storyTitle: {
-        fontFamily: 'medium-content-serif-font,Georgia,Cambria,"Times New Roman",Times,serif',
-        fontSize: 34,
-        lineHeight: '1.25em',
-        fontStyle: 'normal!important',
-        fontWeight: '500!important',
-        color: 'rgba(0,0,0,.84)',
-        letterSpacing: 0,
+        overflow: 'hidden!important',
+        maxHeight: '40px!important',
+        textOverflow: 'ellipsis!important',
+        display: '-webkit-box!important',
+        WwebkitLineClamp: '2!important',
+        WebkitBoxOrient: 'vertical',
+        XHeightMultiplier: '0.342!important',
+        BaselineMultiplier: '0.22!important',
+        fontFamily: 'medium-content-sans-serif-font,"Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Arial,sans-serif!important',
+        fontWeight: '600!important',
+        cursor: 'pointer'
+    },
+    storySummary: {
+        cursor: 'pointer'
     },
     storyItem: {
         height: '5em'
-    }
-};
+    },
+    card: {
+        height: 100,
+        display: 'flex',
+        boxShadow: 'unset'
+    },
+    details: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    content: {
+        flex: '1 0 auto',
+    },
+    cover: {
+        width: 150,
+        cursor: 'pointer'
+    },
+    controls: {
+        display: 'flex',
+        alignItems: 'center',
+        paddingLeft: theme.spacing.unit,
+        paddingBottom: theme.spacing.unit,
+    },
+    playIcon: {
+        height: 38,
+        width: 38,
+    },
+});
 
 const StoryList = ({ classes, stories, editable, onDelete, onEdit, onItemPress }) => {
     return (
         <Grid container justify="center" className={classes.container}>
             <Grid item xs={12} sm="auto" className={classes.contentWrapper}>
-                {/* <List dense className={classes.root}>
-                    {stories.map((story, index) => {
-                        const { content: { title, summary }, writer, _id } = story;
-                        return (
-                            <ListItem key={index} button className={classes.storyItem} onClick={() => onItemPress(story)}>
-                                <ListItemText primary={title} secondary={summary} />
-                                {editable &&
-                                    <ListItemSecondaryAction>
-                                        <IconButton onClick={() => onDelete(story)}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                        <IconButton onClick={() => onEdit(story)}>
-                                            <EditIcon />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>}
-                            </ListItem>
-                        )
-                    })}
-                </List> */}
-                {stories.map((story, index) => (
-                    <Card className={classes.card}>
-                        <CardMedia
-                            className={classes.cover}
-                            image="/static/images/cards/live-from-space.jpg"
-                            title="Live from space album cover"
-                        />
-                        <CardContent className={classes.content}>
-                            <Typography component="h5" variant="h5">
-                                Live From Space
-                            </Typography>
-                            <Typography variant="subtitle1" color="textSecondary">
-                                Mac Miller
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                ))}
+                {stories.map((story, index) => {
+                    const { content: { title, summary, mainImage }, writer, _id } = story;
+                    return (
+                        <Card className={classes.card} key={index}>
+                            {mainImage && mainImage.url &&
+                                <CardMedia
+                                    onClick={() => onItemPress(story)}
+                                    className={classes.cover}
+                                    image={mainImage.url}
+                                    title={title}
+                                />}
+                            <CardActionArea onClick={() => onItemPress(story)}>
+                                <CardContent className={classes.content} style={editable ? { flex: 'none' } : {}}>
+                                    <Typography component="h5" variant="h5" className={classes.storyTitle}>
+                                        {title}
+                                    </Typography>
+                                    <Typography variant="subtitle1" color="textSecondary" className={classes.storySummary}>
+                                        {summary}
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
+                            {editable &&
+                                <CardActions>
+                                    <IconButton onClick={() => onDelete(story)}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                    <IconButton onClick={() => onEdit(story)}>
+                                        <EditIcon />
+                                    </IconButton>
+                                </CardActions>}
+                        </Card>
+                    )
+                })}
             </Grid>
         </Grid>
     );
 }
 
-export default withStyles(styles)(StoryList)
+export default withStyles(styles, { withTheme: true })(StoryList)

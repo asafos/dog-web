@@ -47,6 +47,9 @@ const styles = {
         textAlign: 'center',
         paddingTop: 16,
         cursor: 'pointer'
+    },
+    button: {
+        marginLeft: 16
     }
 };
 
@@ -167,7 +170,8 @@ class CreateStory extends Component {
     };
 
     render() {
-        const { classes, handleSubmit, stories: { fetching } } = this.props;
+        const { classes, handleSubmit, stories: { fetching }, history } = this.props;
+        console.log(history)
         return (
             <form onSubmit={handleSubmit(this.onSubmit)}>
                 <Grid container justify="center">
@@ -183,7 +187,12 @@ class CreateStory extends Component {
                     <Grid item xs={12} className={classes.container}>
                         <Grid container justify="flex-end">
                             <Grid item>
-                                <Button type="submit" variant="contained" color="primary" disabled={fetching}>
+                                <Button variant="contained" disabled={fetching}
+                                    className={classes.button} onClick={() => history.goBack()}>
+                                    Previous
+                                </Button>
+                                <Button type="submit" variant="contained" color="primary"
+                                    disabled={fetching} className={classes.button}>
                                     Submit
                                 </Button>
                             </Grid>
