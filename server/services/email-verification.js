@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import ev from 'email-verification';
-import { auth } from 'config';
+import config, { auth } from 'config';
 
 const {emailVerification: {verificationURL, service, tempUserCollection}} = auth;
 const Users = mongoose.model('Users');
