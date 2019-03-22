@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
+import NoImage from '../../assets/images/no-image.png'
 
 const styles = theme => ({
     container: {},
@@ -73,13 +74,12 @@ const StoryList = ({ classes, stories, editable, onDelete, onEdit, onItemPress }
                     const { content: { title, summary, mainImage }, writer, _id } = story;
                     return (
                         <Card className={classes.card} key={index}>
-                            {mainImage && mainImage.url &&
-                                <CardMedia
-                                    onClick={() => onItemPress(story)}
-                                    className={classes.cover}
-                                    image={mainImage.url}
-                                    title={title}
-                                />}
+                            <CardMedia
+                                onClick={() => onItemPress(story)}
+                                className={classes.cover}
+                                image={mainImage && mainImage.url || NoImage}
+                                title={title}
+                            />
                             <CardActionArea onClick={() => onItemPress(story)}>
                                 <CardContent className={classes.content} style={editable ? { flex: 'none' } : {}}>
                                     <Typography component="h5" variant="h5" className={classes.storyTitle}>
