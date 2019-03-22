@@ -27,7 +27,7 @@ class Home extends Component {
     render() {
         const { classes, stories: { content, fetching }, history } = this.props;
 
-        if (fetching) return <div>LOADING</div>;
+        if (fetching) return null;
 
         return (
             <Grid container className={classes.container}>
