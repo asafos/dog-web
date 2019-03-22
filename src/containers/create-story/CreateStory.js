@@ -109,8 +109,8 @@ class CreateStory extends Component {
                             className={classNames(classes.section, classes.imageCOntainer)}
                         >
                             <input {...getInputProps()} />
-                            {value.base64 ?
-                                <img src={value.base64} className={classes.image} /> :
+                            {value.base64 || value.url ?
+                                <img src={value.base64 || value.url} className={classes.image} /> :
                                 isDragActive ?
                                     <p>Drop files here...</p> :
                                     <p>Try dropping some files here, or click to select files to upload.</p>

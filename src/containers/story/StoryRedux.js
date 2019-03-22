@@ -15,7 +15,7 @@ const {Types, Creators} = createActions({
     saveStory: ['story'],
     saveStorySucceeded: null,
     saveStoryFailed: ['error'],
-    updateStory: ['story'],
+    updateStory: ['story', 'apply'],
     updateStorySucceeded: null,
     updateStoryFailed: ['error'],
     removeStory: ['storyId'],

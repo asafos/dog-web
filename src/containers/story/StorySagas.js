@@ -55,6 +55,7 @@ function* saveStorySaga(action) {
         yield put(showNotification('Story saved'));
         yield put(push('/story/' + res.data.story._id));
     } catch (error) {
+        yield put(showNotification('Story was not saved.', error.response.data));
         yield put(saveStoryFailed(error));
     }
 }
@@ -66,6 +67,7 @@ function* updateStorySaga(action) {
         yield put(showNotification('Story saved'));
         yield put(push('/story/' + action.story._id));
     } catch (error) {
+        yield put(showNotification('Story was not saved.', error.response.data));
         yield put(updateStoryFailed(error));
     }
 }
@@ -74,8 +76,9 @@ function* removeStorySaga(action) {
     try {
         const res = yield call(() => axios.delete('/api/story/' + action.storyId));
         yield put(removeStorySucceeded(res.data.stories));
-        yield put(showNotification('Story deleted'));
+        yield put(showNotification('Story Removed.'));
     } catch (error) {
+        yield put(showNotification('Story was not Removed.', error.response.data));
         yield put(removeStoryFailed(error));
     }
 }

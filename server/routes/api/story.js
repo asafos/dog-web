@@ -58,7 +58,7 @@ router.put('/', isAuthenticated, async (req, res, next) => {
     try {
         const updatedAt = new Date();
         const { sections = [], mainImage } = body.content;
-        if (mainImage) {
+        if (mainImage && mainImage.base64) {
             mainImage.url = await uploadImage(mainImage);
             delete mainImage.base64;
         }
