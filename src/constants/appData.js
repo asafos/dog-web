@@ -1,1 +1,1 @@
-module.exports = {SITE_NAME: 'Website Name'};
+module.exports = {SITE_NAME: 'Dog Web'};
