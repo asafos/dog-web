@@ -39,6 +39,7 @@ const styles = theme => ({
         height: '5em'
     },
     card: {
+        paddingBottom: '1em',
         height: 100,
         display: 'flex',
         boxShadow: 'unset'
